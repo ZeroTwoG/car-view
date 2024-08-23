@@ -176,7 +176,7 @@ export default {
         require("../../assets/img/carousel/carousel-3.png"),
       ],
       //高德地图的key
-      key: "6cefb344ace6ca9783a0fede07ade4a9",
+      key: "8b25caa4d4b08f7cc6a6f036094f27d5",
       cityDetail: {
         adcode: "",//城市编号
       },
@@ -218,6 +218,7 @@ export default {
         return res.text();
       })).then((json => {
         this.cityDetail = JSON.parse(json);
+        console.log(this.cityDetail)
         this.getWeather(this.cityDetail.adcode);
       }))
     },
@@ -279,6 +280,7 @@ export default {
     },
     //加载所有店铺信息
     loadAllStore(address) {
+      console.log("address定位")
       console.log(address);
       axios.get("http://172.16.7.55:7011/mainPage/store/selectStore?rectangle=" + address.rectangle).then(resp => {
         this.store = resp.data.data;

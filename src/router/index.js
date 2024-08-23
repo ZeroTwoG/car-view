@@ -55,6 +55,15 @@ const routes = [
     path: '/payment',
     component: () => import('../views/my/common/Payment.vue')
   },
+  {
+    path: '/map',
+    component: () => import('../views/map/Map.vue')
+  },
+  {
+    path: '/SingleCommodity',
+    component: () => import('../views/store/SingleCommodity.vue')
+  },
+
 ]
 
 const router = new VueRouter({
