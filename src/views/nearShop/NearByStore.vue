@@ -153,9 +153,7 @@ export default {
         }
     },
     created() {
-
         this.getLocationInfo();
-
     },
     methods: {
         //async 用于申明一个 function 是异步的，
@@ -170,21 +168,21 @@ export default {
                     // myJson 是一个json字符串
                     _this.data1 = JSON.parse(myJson); //把json字符串转为json数组
                     _this.address.rectangle = _this.data1.rectangle; //获取当前位置的经纬度
-                    // console.log(_this.data1,"--------")
                     _this.loadAllStore(_this.address);
-                    // console.log(_this.address.rectangle)
+                    // console.log(_this.data1);   //获取位置信息
+                    // console.log(_this.address.rectangle); //获取经纬度
+
                 });
         },
         //加载所有店铺信息
         loadAllStore(address) {
-            axios.get("http://172.16.7.55:7011/mainPage/store/selectStore", address).then(resp => {
+            axios.get("http://172.16.7.55:7011/mainPage/store/selectStore?rectangle=" + address.rectangle).then(resp => {
+                console.log(resp.data.data);
                 this.store = resp.data.data;
                 //默认距离优先
                 this.selectDistance();
             })
             this.address.storeName = '';
-
-
         },
         //刷新方法
         onRefresh() {

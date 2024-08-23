@@ -280,8 +280,7 @@ export default {
     //加载所有店铺信息
     loadAllStore(address) {
       console.log(address);
-      axios.get("http://172.16.7.55:7011/mainPage/store/selectStore", address).then(resp => {
-        console.log(resp.data.data);
+      axios.get("http://172.16.7.55:7011/mainPage/store/selectStore?rectangle=" + address.rectangle).then(resp => {
         this.store = resp.data.data;
         this.storeLength = this.store.length;
         //默认距离优先

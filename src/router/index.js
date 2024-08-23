@@ -25,6 +25,11 @@ const routes = [
     path: '/threeLogin',
     component: () => import('../views/threeLogin.vue')
   },
+  // 登陆页面-结算
+  {
+    path: '/SelectARecord',
+    component: () => import('../views/mainPage/SelectARecord.vue')
+  },
   // 主页面
   {
     path: '/home',
@@ -44,6 +49,11 @@ const routes = [
   {
     path: '/my',
     component: () => import('../views/my/My.vue')
+  },
+  // 我的-公共
+  {
+    path: '/payment',
+    component: () => import('../views/my/common/Payment.vue')
   },
 ]
 
