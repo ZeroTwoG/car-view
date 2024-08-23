@@ -50,8 +50,8 @@ export default {
   },
   data() {
     return {
-      username: 'admin',
-      password: '123456',
+      username: '18436657617',
+      password: '123456a',
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -61,12 +61,11 @@ export default {
   },
   methods: {
     login() {
-      axios.post("http://172.16.7.55:7011/sso/login?username=" + this.username + "&password=" + this.password).then((res => {
+      axios.post("http://172.16.7.55:7011/sso/login?username=FIFTH" + this.username + "&password=" + this.password).then((res => {
         console.log(res.data);
         if (res.data.code === 200) {
           sessionStorage.setItem("token", res.data.data.token);
           sessionStorage.setItem("user", JSON.stringify(res.data.data.user));
-          sessionStorage.setItem("role", JSON.stringify(res.data.data.role));
           this.$message({
             message: res.data.msg,
             type: 'success'

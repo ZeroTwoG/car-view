@@ -81,7 +81,7 @@ export default {
         //获取用户信息
         selectUser() {
             axios.get("http://172.16.7.55:7011/mainPage/FrontUser/getUserInfo").then(res => {
-                this.form.userId = resp.data.data.userId;
+                this.form.userId = res.data.data.userId;
                 this.selectByToken();
             })
         },

@@ -9,7 +9,7 @@
                     <van-search v-model="address.storeName" shape="round" placeholder="请输入店铺搜索关键词" />
                 </van-col>
                 <van-col span="3" style="margin-top: 15px; text-align: left; font-size: 24px">
-                    <van-icon name="search" @click="searchEss" />
+                    <van-icon name="search" @click="getLocationInfo" />
                 </van-col>
             </van-row>
             <!--轮播图-->
@@ -165,22 +165,17 @@ export default {
                     return response.text();
                 })
                 .then(function (myJson) {
-                    // myJson 是一个json字符串
                     _this.data1 = JSON.parse(myJson); //把json字符串转为json数组
                     _this.address.rectangle = _this.data1.rectangle; //获取当前位置的经纬度
                     _this.loadAllStore(_this.address);
                     // console.log(_this.data1);   //获取位置信息
                     // console.log(_this.address.rectangle); //获取经纬度
-
                 });
         },
         //加载所有店铺信息
         loadAllStore(address) {
-            axios.get("http://172.16.7.55:7011/mainPage/store/selectStore?rectangle=" + address.rectangle).then(resp => {
-                console.log(resp.data.data);
+            axios.get("http://172.16.7.55:7011/mainPage/store/selectStore?rectangle=" + address.rectangle + "&storeName=" + address.storeName).then(resp => {
                 this.store = resp.data.data;
-                //默认距离优先
-                this.selectDistance();
             })
             this.address.storeName = '';
         },
@@ -189,6 +184,7 @@ export default {
             setTimeout(() => {
                 Toast("刷新成功");
                 this.isLoading = false;
+                this.getLocationInfo()
                 //调用请求
             }, 1000);
         },
@@ -213,9 +209,6 @@ export default {
             if (this.leng > 17) {
                 this.leng = this.leng - 1;
             }
-            console.log(
-                this.leng
-            )
             this.getLocationInfo();
         },
         //重置该地区选项
@@ -232,6 +225,20 @@ export default {
         //排序方法 好评或距离优先
         bindSort() {
             this.showSort = true;
+        },
+        //距离优先
+        selectDistance() {
+            for (var i = 1; i < this.store.length; i++) {
+                for (var j = 0; j < this.store.length - i; j++) {
+                    // 比较距离的大小
+                    if (this.store[j].storeDistance > this.store[j + 1].storeDistance) {
+                        //交换位置
+                        let tmp = this.store[j];
+                        this.store[j] = this.store[j + 1];
+                        this.store[j + 1] = tmp;
+                    }
+                }
+            }
         },
         //根据星级评分进行显示
         selecrHeightStar() {
@@ -251,24 +258,8 @@ export default {
                 }
             }
         },
-        //距离优先
-        selectDistance() {
-            console.log("进来此方法")
-            for (var i = 1; i < this.store.length; i++) {
-                for (var j = 0; j < this.store.length - i; j++) {
-                    // 比较距离的大小
-                    if (this.store[j].storeDistance > this.store[j + 1].storeDistance) {
-                        //交换位置
-                        let tmp = this.store[j];
-                        this.store[j] = this.store[j + 1];
-                        this.store[j + 1] = tmp;
-                    }
-                }
-            }
-        },
         //确认选中的排序方式
         onSortConfirm(val) {
-            console.log(val, "-----")
             this.valueSort = val[0].name;
             this.showSort = false;
             if (this.valueSort == "距离优先") {
@@ -280,12 +271,6 @@ export default {
         },
         SortCancel() {
             this.showSort = false;
-        },
-
-        //搜索框的方法
-        searchEss() {
-            this.getLocationInfo();
-            console.log(this.address.storeName)
         },
         //点击店铺跳转
         goStoreInfo(storeId, averageStar, storeDistance) {
