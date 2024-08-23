@@ -95,7 +95,7 @@
                 <!--门店名称-->
                 <van-cell class="storeName" style="font-weight: normal;font-size: 20px;color: black">{{
                   item.storeName
-                }}
+                  }}
                 </van-cell>
                 <!--门店星级-->
                 <div class="interval">
@@ -112,7 +112,7 @@
                   &nbsp;
                   <van-tag color="#FFA500" size="medium" v-if="item.stationUsed != 0">使用中:&nbsp;&nbsp;{{
                     item.stationUsed
-                  }}
+                    }}
                   </van-tag>
                 </div>
                 <!-- 门店标签 -->
@@ -203,12 +203,12 @@ export default {
   },
   methods: {
     init() {
-      axios.get("http://172.16.7.55:7011/mainPage/FrontUser/getUserInfo").then((res => {
+      axios.get("http://172.16.7.55:7011/mainPage/FrontUser/getUserInfo").then(res => {
         if (res.data.code === 200) {
           console.log(res.data.data);
           this.userId = res.data.data.userId;
         }
-      }));
+      });
     },
     //获取当前所在的城市
     getCity() {
@@ -280,9 +280,7 @@ export default {
     },
     //加载所有店铺信息
     loadAllStore(address) {
-      console.log("address定位")
-      console.log(address);
-      axios.get("http://172.16.7.55:7011/mainPage/store/selectStore?rectangle=" + address.rectangle).then(resp => {
+      axios.get("http://172.16.7.55:7011/mainPage/store/selectStore?rectangle=" + address.rectangle + "&storeName=" + address.storeName).then(resp => {
         this.store = resp.data.data;
         this.storeLength = this.store.length;
         //默认距离优先

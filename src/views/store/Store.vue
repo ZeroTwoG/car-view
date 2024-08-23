@@ -156,7 +156,6 @@ export default {
         loadProductType() {
             //这里使用funtion传参必须用let _this=this;
             axios.get("http://172.16.7.55:7011/store/productType/selectAllProductType").then(response => {
-                console.log(response.data.data);
                 this.productTypes = response.data.data;
                 this.queryByProduct();
                 this.handleTabChange(this.productTypes[0].commentId);

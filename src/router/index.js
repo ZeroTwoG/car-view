@@ -40,6 +40,10 @@ const routes = [
     path: '/nearByStore',
     component: () => import('../views/nearShop/NearByStore.vue')
   },
+  {
+    path: '/StoreInformation',
+    component: () => import('../views/nearShop/storeDetail/StoreInformation.vue')
+  },
   // 商城
   {
     path: '/store',
@@ -50,8 +54,7 @@ const routes = [
     path: '/my',
     component: () => import('../views/my/My.vue')
   },
-  // 我的-公共
-  {
+  { // 我的-公共
     path: '/payment',
     component: () => import('../views/my/common/Payment.vue')
   },
