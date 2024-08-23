@@ -71,8 +71,8 @@ export default {
             message: res.data.msg,
             type: 'success'
           });
-          const redirect = sessionStorage.getItem("redirect") || "/index"
-          this.$router.push("/index");
+          const redirect = sessionStorage.getItem("redirect") || "/home"
+          this.$router.push("/home");
         } else {
           this.$message({
             message: res.data.msg,

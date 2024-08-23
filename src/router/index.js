@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    component: () => import('../views/index.vue')
+    component: () => import('../views/mainPage/Home.vue')
   },
   // 登陆页面
   {
@@ -27,8 +27,23 @@ const routes = [
   },
   // 主页面
   {
-    path: '/index',
-    component: () => import('../views/index.vue')
+    path: '/home',
+    component: () => import('../views/mainPage/Home.vue')
+  },
+  // 附近门店
+  {
+    path: '/nearByStore',
+    component: () => import('../views/nearShop/NearByStore.vue')
+  },
+  // 商城
+  {
+    path: '/store',
+    component: () => import('../views/store/Store.vue')
+  },
+  // 我的
+  {
+    path: '/my',
+    component: () => import('../views/my/My.vue')
   },
 ]
 
