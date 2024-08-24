@@ -134,7 +134,7 @@ export default {
             ],
             productTypes: [], //商品类型对象
             activeTab: "",
-            products: [], //商品对象
+            products: undefined, //商品对象
             proTypeId: '',
             optionProduct: [],//输入框选择商品搜索
             productName: '', //根据商品名称查询
@@ -173,8 +173,15 @@ export default {
         //根据商品类型查询商品
         queryByProduct() {
           this.$axios.get("/store/product/select?proTypeId=" + this.proTypeId + "&productName=" + this.productName).then(resp => {
-                console.log(resp.data.data);
-                this.products = resp.data.data;
+            let datas = resp.data.data;
+            console.log("商品:::")
+            if(datas!=null){
+              this.products = datas.tbProduct;
+              for (let i = 0; i < this.products.length; i++){
+                this.products[i].storeId=datas.tbStore[i].storeId;
+              }
+            }
+
             })
         },
 
