@@ -124,7 +124,7 @@ export default {
                 city: "",
                 rectangle: '',
             },
-            valueSort: "距离优先", //列表默认排序方式
+            valueSort: "好评优先", //列表默认排序方式
             valueArea: "请选择地区", //地区值
             //默认不出现选择地区列表
             showArea: false,

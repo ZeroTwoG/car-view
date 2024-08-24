@@ -319,8 +319,7 @@ export default {
     created() {
         const userDataStr = sessionStorage.getItem("user");
         const userData = JSON.parse(userDataStr);
-        console.log(userData);
-
+        this.userId = userData.userId
         this.storeId = this.$route.query.storeId;
         this.averageStar = parseFloat(this.$route.query.averageStar);
         this.storeDistance = parseFloat(this.$route.query.storeDistance);
@@ -329,7 +328,7 @@ export default {
         this.selectStoreStation(this.storeId);
         //执行方法 获取echarts图表需要的数据
         this.selectUserNumber();
-        this.selectUser();
+        this.checkedBind();
     },
     mounted() {
         this.myEcharts();
@@ -342,14 +341,6 @@ export default {
                 path: "/StoreMap",
                 query: { longitude: longitude, latitude: latitude, address: address },
             });
-        },
-        //获取用户信息
-        selectUser() {
-            axios.get("http://172.16.7.55:7011/mainPage/FrontUser/getUserInfo").then(res => {
-                this.userId = res.data.data.userId;
-                this.userId = 22
-                this.checkedBind();
-            })
         },
         //查看是否绑定门店
         checkedBind() {
@@ -373,7 +364,7 @@ export default {
         selectUserNumber() {
             let _this = this;
             //使用axios向后台发请求
-            axios.get("/store/washrecord/api/selectRecord?storeId=" + this.storeId)
+            axios.get("http://172.16.7.55:7011/nearShop/carWashRecord/selectRecord?storeId=" + this.storeId)
                 .then(function (response) {
                     if (response.data.data.length == 0) {
                         _this.washMsg = "暂无洗车数据"
@@ -470,29 +461,25 @@ export default {
         },
         //通过storeId查店铺
         selectStore(storeId) {
-            this.$http.post("/store/api/selectByStoreId?storeId=" + storeId).then(resp => {
+            axios.post("http://172.16.7.55:7011/nearShop/store/selectByStoreId?storeId=" + storeId).then(resp => {
                 this.store = resp.data.data;
             })
         },
         //通过storeId查询评分
         selectStoreEvaluate(storeId) {
-            this.$http.post("/store/evaluate/api/selectCommentsVoByStoreId?storeId=" + storeId).then(resp => {
+            axios.post("http://172.16.7.55:7011/nearShop/storeEvaluate/selectCommentsVoByStoreId?storeId=" + storeId).then(resp => {
                 this.storeEvaluate = resp.data.data;
                 this.storeEvaluate.forEach(item => {
                     if (item.userName == null) {
                         item.userName = "匿名用户"
-
                     }
-
                 })
-                console.log(this.storeEvaluate)
             })
         },
         //通过storeId查询工位
         selectStoreStation(storeId) {
-            this.$http.post("/store/station/api/selectByStoreId?storeId=" + storeId).then(resp => {
+            axios.post("http://172.16.7.55:7011/nearShop/station/selectByStoreId?storeId=" + storeId).then(resp => {
                 this.storeStation = resp.data.data;
-                console.log(this.storeStation)
             })
         },
         //详细评论跳转
@@ -511,7 +498,7 @@ export default {
                     })
                     .then(() => {
                         this.bingStoreMsg();
-                        this.selectUser();
+                        this.checkedBind();
                         console.log("确认");
                     })
                     .catch(() => {
@@ -521,9 +508,7 @@ export default {
         },
         //绑定门店信息
         bingStoreMsg() {
-            this.frontUserStore.userId = this.userId;
-            this.frontUserStore.storeId = this.storeId;
-            this.$http.post("/store/frontuser/api/insertFrontUser", this.frontUserStore).then(resp => {
+            axios.post("http://172.16.7.55:7011/nearShop/frontUserStore/insertFrontUser?userId=" + this.userId + "&storeId=" + this.storeId).then(resp => {
                 if (resp.data.code == 200) {
                     this.bindStore = true;
                 }
@@ -531,7 +516,6 @@ export default {
         },
         //跳转商店
         shop(storeId, storeName, storeimage) {
-            console.log(storeimage, "-------------")
             this.product.storeId = storeId;
             this.product.storeName = storeName
             this.product.storeimage = storeimage;
@@ -559,7 +543,7 @@ export default {
                     })
                     .then(() => {
                         this.bingStoreMsg();
-                        this.selectUser();
+                        this.checkedBind();
                         console.log("确认");
                     })
                     .catch(() => {

@@ -44,6 +44,10 @@ const routes = [
     path: '/StoreInformation',
     component: () => import('../views/nearShop/storeDetail/StoreInformation.vue')
   },
+  {
+    path: '/StationDetail',
+    component: () => import('../views/nearShop/storeDetail/StationDetail.vue')
+  },
   // 商城
   {
     path: '/store',
