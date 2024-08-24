@@ -176,7 +176,7 @@ export default {
         require("../../assets/img/carousel/carousel-3.png"),
       ],
       //高德地图的key
-      key: "6cefb344ace6ca9783a0fede07ade4a9",
+      key: "8b25caa4d4b08f7cc6a6f036094f27d5",
       cityDetail: {
         adcode: "",//城市编号
       },
@@ -218,6 +218,7 @@ export default {
         return res.text();
       })).then((json => {
         this.cityDetail = JSON.parse(json);
+        console.log(this.cityDetail)
         this.getWeather(this.cityDetail.adcode);
       }))
     },
@@ -282,6 +283,8 @@ export default {
       axios.get("http://172.16.7.55:7011/mainPage/store/selectStore?rectangle=" + address.rectangle + "&storeName=" + address.storeName).then(resp => {
         this.store = resp.data.data;
         this.storeLength = this.store.length;
+        //默认距离优先
+        this.selectDistance();
         let i = 0;
         this.store = this.store.filter(function (item) {
           i++;
@@ -291,6 +294,20 @@ export default {
           return item;
         });
       })
+    },
+    //距离优先
+    selectDistance() {
+      for (let i = 1; i < this.store.length; i++) {
+        for (let j = 0; j < this.store.length - i; j++) {
+          // 比较距离的大小
+          if (this.store[j].storeDistance > this.store[j + 1].storeDistance) {
+            //交换位置
+            let tmp = this.store[j];
+            this.store[j] = this.store[j + 1];
+            this.store[j + 1] = tmp;
+          }
+        }
+      }
     },
 
     //跳转页面的方法
