@@ -14,13 +14,13 @@
             <!-- 标题 -->
         </van-sticky>
 <!--         轮播图：商品图片-->
-<!--                <van-swipe :autoplay="3000">-->
-<!--                    &lt;!&ndash; 循环拿到的该商品的图片 &ndash;&gt;-->
-<!--                    <van-swipe-item v-for="(image, index) in productImages" :key="index">-->
-<!--                        <img v-lazy="image" style="height: 300px; width: 100%; border-radius: 7px"/>-->
-<!--                    </van-swipe-item>-->
-<!--                </van-swipe>-->
-        <img :src="productImages" style="width: 100%; height: 300px; border-radius: 7px"/>
+                <van-swipe :autoplay="3000">
+                    <!-- 循环拿到的该商品的图片 -->
+                    <van-swipe-item v-for="(image, index) in productImages" :key="index">
+                      <img :src="image" style="height: 300px; width: 100%; border-radius: 7px">
+                    </van-swipe-item>
+                </van-swipe>
+<!--        <img :src="productImages" style="width: 100%; height: 300px; border-radius: 7px"/>-->
         <div style="width: 100%; height: 45px; background-color: #66c6f2">
       <span style="
               font-size: 26px;
@@ -143,32 +143,24 @@
             </van-col>
         </van-row>
         <!-- 评价内容 -->
-        <div
+        <div    v-if="productReviews!=null"
                 style="padding: 10px 16px"
-                v-for="productReview in productReviews"
-                :key="productReview.phone"
+                v-for="(productReview,index) in productReviews":key="index"
         >
             <van-row style="width: 100%; height: 45px">
                 <van-col span="12">
-                     头像
+<!--                     头像-->
                     <van-image
                             round
                             width="10rem"
                             height="10rem"
-                            :src="productReview.imageUrl"
-                            style="width: 40px; height: 40px; float: left"
-                    />
-                    <van-image
-                            round
-                            width="10rem"
-                            height="10rem"
-                            :src="imageUrlss"
+                            :src="productReview.user.avatar"
                             style="width: 40px; height: 40px; float: left"
                     />
                     <div style="margin-left: 55px">
-                        <div style="text-align: left; color: gray">{{hidePhoneNumber(productReview.phone)}}</div>
+                        <div style="text-align: left; color: gray">{{hidePhoneNumber(productReview.text.content)}}</div>
                         <van-rate
-                                v-model="productReview.rating"
+                                v-model="productReview.text.rating"
                                 :size="20"
                                 color="#ffd21e"
                                 void-icon="star"
@@ -181,14 +173,14 @@
                         span="12"
                         style="text-align: right; color: gray"
                 >
-                    {{productReview.evaluateTime}}
+                    {{productReview.text.createTime}}
                 </van-col>
             </van-row>
             <van-row>
                 <van-col
                         span="24"
                         style="text-align: left; margin: 10px 0px"
-                >{{productReview.content}}
+                >{{productReview.text.content}}
                 </van-col>
             </van-row>
         </div>
@@ -200,16 +192,16 @@
         <van-row style="height: 65px; padding: 18px">
             <van-col span="24">
                 <!-- 店铺图片 -->
-                <van-image
+                <van-image v-if="selectPeopleAndRating!=null"
                         width="70"
                         height="70"
-                        :src="storeimage"
+                        :src="selectPeopleAndRating.storeImg"
                         radius="8px"
                         style="float: left"
                 />
                 <div style="margin-left: 85px">
                     <div style="text-align: left; margin: 10px 0px">
-                        {{product.storeName}}
+                        {{selectPeopleAndRating.storeName}}
                         <span style="float: right; margin-right: 30px"><van-tag
                                 type="primary"
                                 size="large"
@@ -217,7 +209,7 @@
                         >进店逛逛</van-tag>
             </span>
                     </div>
-                    <van-rate
+                    <van-rate v-if="selectPeopleAndRating!=null"
                             v-model="selectPeopleAndRating.rating"
                             :size="20"
                             color="#ffd21e"
@@ -227,7 +219,7 @@
                             allow-half
                             readonly
                     />
-                    <div style="float: left; color: gray; margin-left: 5px">
+                    <div v-if="selectPeopleAndRating!=null" style="float: left; color: gray; margin-left: 5px">
                         {{selectPeopleAndRating.collectPeople}}人收藏
                     </div>
                 </div>
@@ -333,11 +325,10 @@
                     this.product = product;
                     console.log("this.product", this.product)
                     var _this = this;
-                    axios.get(`http://172.16.7.55:7011/store/product/selectProductImagesByProductId/${product.productId}`)
+                  this.$axios.get(`/store/product/selectProductImagesByProductId/${product.productId}`)
                         .then(function (response) {
-                          console.log("商品展示图")
-                          console.log(response.data.data)
-                            _this.productImages = response.data.data;
+                          _this.productImages = response.data.data;
+                          _this.productImages[0] = product.picture;
                             _this.product = product;
                             //给商品名称赋值
                             _this.productName = product.productName;
@@ -386,26 +377,44 @@
                     this.product = product;
                 }
               console.log("查询商品评价人数和评分星级")
-              axios.get(`http://172.16.7.55:7011/store/product/selectTbStoreEvaluate/${this.product.storeId}` )
+              this.$axios.get(`/store/product/selectTbStoreEvaluate/${this.product.storeId}` )
                     .then(resp => {
-                      console.log(resp.data.data)
+                      if(resp.data.code==200){
                         this.selectPeopleAndRating = resp.data.data;
+                        this.storeimage = this.selectPeopleAndRating.storeImg;
+                      }else {
+                        this.selectPeopleAndRating=null;
+                        this.storeimage=null;
+                      }
+
                     })
               this.selectReview()
             },
-            //查询商品评价o
+            //查询商品评价ok
             selectReview() {
-              console.log("查询商品评价")
                 const data = this.$route.query.data;
                 if (data) {
                     const product = JSON.parse(data);
                     this.product = product;
                 }
-              axios.get(`http://172.16.7.55:7011/store/product/selectTbProduckreviewByProductId/${this.product.productId}`)
+              this.$axios.get(`/store/product/selectTbProduckreviewByProductId/${this.product.productId}`)
                     .then(resp => {
-                      console.log("AAA")
-                        console.log(resp.data)
-                        // this.productReviews = resp.data.data.slice(0, 3);//截取查询结果的前三条
+                      console.log("查询商品评价")
+                      if(resp.data.code==200){
+                        var dataNum = resp.data.data
+                        this.productReviews = dataNum.slice(0, 3);//截取查询结果的前三条
+                        this.total=dataNum.length;
+                        var num = 0;
+                        for (var i = 0; i < dataNum.length; i++){
+                          num += (dataNum[i].text.rating)*20
+                        }
+                        this.goodRatingsPercentage = num/this.total
+                      }else {
+                        this.total=0
+                        this.productReviews=null;
+                        this.goodRatingsPercentage=0;
+                      }
+
                     })
             },
             hidePhoneNumber(phone) {
@@ -413,20 +422,20 @@
                 return phone.slice(0, 1) + "*".repeat(phone.length - 1);
             },
 
-            //查询商品评价的数量和好评率
+            //查询商品评价的数量和好评率 弃用
             selectReviewCount() {
-                let _this = this;
-                this.$http
-                    .post(
-                        "/product/mobile/store/api/selectContentByProductId?productId=" + this.product.productId
-                    )
-                    .then(function (response) {
-                        _this.reviewCount = response.data.data; //查询出来的评价的数量和好评率
-                        _this.total = _this.reviewCount.total;
-                        _this.goodRatingsPercentage = _this.reviewCount.goodRatingsPercentage;
-                    })
-                    .catch(function (error) {
-                    });
+                // let _this = this;
+                // this.$http
+                //     .post(
+                //         "/product/mobile/store/api/selectContentByProductId?productId=" + this.product.productId
+                //     )
+                //     .then(function (response) {
+                //         _this.reviewCount = response.data.data; //查询出来的评价的数量和好评率
+                //         _this.total = _this.reviewCount.total;
+                //         _this.goodRatingsPercentage = _this.reviewCount.goodRatingsPercentage;
+                //     })
+                //     .catch(function (error) {
+                //     });
             },
 
             goEvaluate() {

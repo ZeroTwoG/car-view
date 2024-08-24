@@ -155,7 +155,7 @@ export default {
         //查询ProductType方法
         loadProductType() {
             //这里使用funtion传参必须用let _this=this;
-            axios.get("http://172.16.7.55:7011/store/productType/selectAllProductType").then(response => {
+          this.$axios.get("/store/productType/selectAllProductType").then(response => {
                 this.productTypes = response.data.data;
                 this.queryByProduct();
                 this.handleTabChange(this.productTypes[0].commentId);
@@ -172,7 +172,7 @@ export default {
 
         //根据商品类型查询商品
         queryByProduct() {
-            axios.get("http://172.16.7.55:7011/store/product/select?proTypeId=" + this.proTypeId + "&productName=" + this.productName).then(resp => {
+          this.$axios.get("/store/product/select?proTypeId=" + this.proTypeId + "&productName=" + this.productName).then(resp => {
                 console.log(resp.data.data);
                 this.products = resp.data.data;
             })

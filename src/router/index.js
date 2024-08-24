@@ -49,6 +49,21 @@ const routes = [
     path: '/store',
     component: () => import('../views/store/Store.vue')
   },
+  // 商品评价
+  {
+    path: '/Evaluate',
+    component: () => import('../views/store/Evaluate.vue')
+  },
+  // 店铺详情
+  {
+    path: '/StoreCheck',
+    component: () => import('../views/store/StoreCheck.vue')
+  },
+  // 兑换订单
+  {
+    path: '/SingleOrder',
+    component: () => import('../views/store/SingleOrder.vue')
+  },
   // 我的
   {
     path: '/my',
@@ -66,6 +81,7 @@ const routes = [
     path: '/SingleCommodity',
     component: () => import('../views/store/SingleCommodity.vue')
   },
+
 
 ]
 

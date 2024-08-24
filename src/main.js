@@ -10,6 +10,8 @@ Vue.use(Van)
 // 引入vue-amap
 import VueAMap from 'vue-amap'
 import axios from 'axios'
+axios.defaults.baseURL = "http://172.16.7.55:7011"
+Vue.prototype.$axios = axios;
 Vue.use(VueAMap)
 
 // 初始化vue-amap
