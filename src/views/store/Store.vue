@@ -175,10 +175,13 @@ export default {
           this.$axios.get("/store/product/select?proTypeId=" + this.proTypeId + "&productName=" + this.productName).then(resp => {
             let datas = resp.data.data;
             console.log("商品:::")
+            console.log(resp.data.data)
             if(datas!=null){
               this.products = datas.tbProduct;
               for (let i = 0; i < this.products.length; i++){
                 this.products[i].storeId=datas.tbStore[i].storeId;
+                this.products[i].storeName=datas.tbStore[i].storeName;
+                this.storeimage=datas.tbStore[i].storeimage;
               }
             }
 

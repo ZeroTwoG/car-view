@@ -9,15 +9,23 @@ Vue.use(Van)
 
 // 引入vue-amap
 import VueAMap from 'vue-amap'
+
+// 引入axios
 import axios from 'axios'
 axios.defaults.baseURL = "http://172.16.7.55:7011"
 Vue.prototype.$axios = axios;
+
+// 工具类
+import _ from 'lodash';
+Vue.prototype._ = _;
+// 深层拷贝: var data1 = _.cloneDeep(data2);
+
 Vue.use(VueAMap)
 
 // 初始化vue-amap
 VueAMap.initAMapApiLoader({
   // 高德的key
-  key: 'da6de8951cea341fa3d16969a63d8793',
+  key: '8b25caa4d4b08f7cc6a6f036094f27d5',
   // 插件集合
   plugin: [
     'AMap.CircleEditor',// 圆形编辑器插件
@@ -32,7 +40,7 @@ VueAMap.initAMapApiLoader({
 });
 //高德的安全密钥
 window._AMapSecurityConfig = {
-  securityJsCode: '46fabc9b583a43c18e703a4189949d5c',
+  securityJsCode: '5eff5dfe18a510317ace06da8652ca38',
 }
 
 //底部四个按钮固定位置
