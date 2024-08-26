@@ -17,7 +17,7 @@
       <!-- 轮播图 -->
       <van-swipe class="my-swipe" :autoplay="1500" indicator-color="white">
         <van-swipe-item v-for="(image) in images">
-          <img @click="jump('AA')" :src="image" style="height: 195px; width: 100%; border-radius: 7px" />
+          <img :src="image" style="height: 195px; width: 100%; border-radius: 7px" />
         </van-swipe-item>
       </van-swipe>
 <!--      =============================================================================-->
@@ -250,7 +250,6 @@ export default {
         Toast("刷新成功");
         this.getLocationInfo();
         this.getCity();
-        this.init();
         this.isLoading = false;
         //调用请求
       }, 1000);

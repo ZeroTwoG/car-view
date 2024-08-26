@@ -187,17 +187,15 @@ export default {
             numArr: [],
             storeId: '',
             initUserId: 0,
+            createBy: "",
         };
-    },
-    mounted: function () {
-        // this.info.carStore.storeId = this.$route.query.storeId;
-        // console.log("获取的门店id:" + this.info.carStore.storeId);
     },
     created() {
         const userDataStr = sessionStorage.getItem("user");
         const userData = JSON.parse(userDataStr);
         this.initUserId = userData.userId
         this.storeId = this.$route.query.storeId;
+        this.createBy = userData.userName;
         if (this.storeId != null) {
             this.selectStoreName();
         }
@@ -239,7 +237,7 @@ export default {
             } else if (this.carNo.length < 7) {
                 this.$toast("请填写正确的车牌号");
             } else {
-                axios.post("http://172.16.7.55:7011/mainPage/car/bingCar?userId=" + this.info.userId + "&carNo=" + this.carNo + "&storeId=" + this.storeId)
+                axios.post("http://172.16.7.55:7011/mainPage/car/bingCar?userId=" + this.info.userId + "&carNo=" + this.carNo + "&storeId=" + this.storeId + "&createBy" + this.createBy)
                     .then(response => {
                         if (response.data.code == 200) {
                             this.$toast("添加成功");
@@ -247,7 +245,7 @@ export default {
                                 path: "/home",
                             });
                         } else {
-                            this.$toast("请勿重复绑定");
+                            this.$toast(response.data.msg);
                         }
                     })
                     .catch(function (error) {
