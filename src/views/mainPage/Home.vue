@@ -95,7 +95,7 @@
                 <!--门店名称-->
                 <van-cell class="storeName" style="font-weight: normal;font-size: 20px;color: black">{{
                   item.storeName
-                  }}
+                }}
                 </van-cell>
                 <!--门店星级-->
                 <div class="interval">
@@ -112,7 +112,7 @@
                   &nbsp;
                   <van-tag color="#FFA500" size="medium" v-if="item.stationUsed != 0">使用中:&nbsp;&nbsp;{{
                     item.stationUsed
-                    }}
+                  }}
                   </van-tag>
                 </div>
                 <!-- 门店标签 -->
@@ -199,17 +199,8 @@ export default {
   created() {
     this.getLocationInfo();
     this.getCity();
-    this.init();
   },
   methods: {
-    init() {
-      axios.get("http://172.16.7.55:7011/mainPage/FrontUser/getUserInfo").then(res => {
-        if (res.data.code === 200) {
-          console.log(res.data.data);
-          this.userId = res.data.data.userId;
-        }
-      });
-    },
     //获取当前所在的城市
     getCity() {
       fetch(
@@ -218,7 +209,6 @@ export default {
         return res.text();
       })).then((json => {
         this.cityDetail = JSON.parse(json);
-        console.log(this.cityDetail)
         this.getWeather(this.cityDetail.adcode);
       }))
     },

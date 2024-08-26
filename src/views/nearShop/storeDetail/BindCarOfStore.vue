@@ -5,7 +5,7 @@
             <!-- 粘性布局 -->
             <van-sticky>
                 <!-- 导航栏 -->
-                <van-nav-bar title="洗车详情" left-text="返回" left-arrow @click-left="jump('home')" />
+                <van-nav-bar title="选择车辆" left-arrow @click-left="onClickLeft" />
             </van-sticky>
             <p>{{ record }}</p>
             <van-row style="margin-top: 10px; padding-left: 15px;padding-right: 15px; text-align: left"
@@ -48,7 +48,12 @@ export default {
     props: {
         //注册属性，用来父子组件传递参数使用
     },
-
+    setup() {
+        const onClickLeft = () => history.back();
+        return {
+            onClickLeft,
+        };
+    },
     data() {
         //定义数据的地方
         return {
@@ -60,14 +65,18 @@ export default {
             stationId: "", //工位id
             form: {
                 userId: '',
+                storeId: '',
+                stationId: '',
+                carId: '',
+                carNo: ''
             }//传到后台的数据
         };
     },
     created() {
-        const userDataStr = sessionStorage.getItem("user");
-        const userData = JSON.parse(userDataStr);
-        this.form.userId = userData.userId
-        this.selectByToken();
+        this.form.storeId = this.$route.query.storeId;
+        this.form.stationId = this.$route.query.stationId;
+        this.form.userId = this.$route.query.userId;
+        this.selectByToken(this.form);
     },
     mounted() {
         // 生命周期  挂载完成后
@@ -81,34 +90,40 @@ export default {
                 //调用请求
             }, 1000);
         },
-
         //根据token,和门店id查询当前登录用户的添加的车辆
-        selectByToken() {
-            axios.get("http://172.16.7.55:7011/nearShop/carWashRecord/selectByUserId?userId=" + this.form.userId).then(resp => {
-                if (resp.data.code == 200) {
-                    this.carList = resp.data.data;
-                } else {
-                    this.record = "暂无车辆在清洗";
+        selectByToken(form) {
+            axios.post("http://172.16.7.55:7011/mainPage/car/selectBindCar?storeId=" + form.storeId + "&userId=" + form.userId).then(resp => {
+                this.carList = resp.data.data;
+                if (this.carList.length == 0) {
+                    this.record = "该门店没有绑定车辆"
                 }
             })
         },
 
         //点击确定按钮，提示是否给这辆车洗车
         ifChooseCar(radio) {
-            this.$router.push({
-                path: "/SettlementIsOpen",
-                query: {
-                    data: JSON.stringify(radio),
-                },
+            Dialog.confirm({
+                title: "提示",
+                message: "确定给车牌   " + radio.carNo + "   的车辆洗车?",
+            }).then(resp => {
+                this.form.carId = radio.carId;
+                this.form.carNo = radio.carNo;
+                axios.post("http://172.16.7.55:7011/nearShop/carWashRecord/insertCarWahRecord", this.form).then(resp => {
+                    if (resp.data.code == 200) {
+                        Dialog.alert({
+                            title: "提示",
+                            message:
+                                "已开始洗车，计费已开始，可在首页点击结算开门进行结束洗车",
+                        }).then(() => {
+                            //跳转首页,携带参数
+                            this.$router.push({
+                                path: "/home",
+                            });
+                        });
+                    }
+                })
+            }).catch(() => {
             });
-        },
-        //  方法事件处理
-        jump(uri) {
-            this.$router.push(
-                uri,
-                () => { },
-                () => { }
-            );
         },
     },
 };

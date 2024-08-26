@@ -35,6 +35,14 @@ const routes = [
     path: '/home',
     component: () => import('../views/mainPage/Home.vue')
   },
+  {
+    path: '/BindCar',
+    component: () => import('../views/mainPage/bindCar/BindCar.vue')
+  },
+  {
+    path: '/carWashCalendar',
+    component: () => import('../views/mainPage/CarWashCalendar.vue')
+  },
   // 附近门店
   {
     path: '/nearByStore',
@@ -47,6 +55,18 @@ const routes = [
   {
     path: '/StationDetail',
     component: () => import('../views/nearShop/storeDetail/StationDetail.vue')
+  },
+  {
+    path: '/EvaluateDetail',
+    component: () => import('../views/nearShop/storeDetail/EvaluateDetail.vue')
+  },
+  {
+    path: '/StoreMap',
+    component: () => import('../views/nearShop/storeDetail/StoreMap.vue')
+  },
+  {
+    path: '/BindCarOfStore',
+    component: () => import('../views/nearShop/storeDetail/BindCarOfStore.vue')
   },
   // 商城
   {
@@ -73,7 +93,7 @@ const routes = [
     path: '/my',
     component: () => import('../views/my/My.vue')
   },
-  { // 我的-公共
+  {
     path: '/payment',
     component: () => import('../views/my/common/Payment.vue')
   },
