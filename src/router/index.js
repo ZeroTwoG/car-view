@@ -40,6 +40,10 @@ const routes = [
     component: () => import('../views/mainPage/bindCar/BindCar.vue')
   },
   {
+    path: '/Selectastore',
+    component: () => import('../views/mainPage/bindCar/Selectastore.vue')
+  },
+  {
     path: '/carWashCalendar',
     component: () => import('../views/mainPage/CarWashCalendar.vue')
   },
@@ -104,6 +108,14 @@ const routes = [
   {
     path: '/SingleCommodity',
     component: () => import('../views/store/SingleCommodity.vue')
+  },
+  {
+    path: '/myCar',
+    component: () => import('../views/my/common/MyCar.vue')
+  },
+  {
+    path: '/balance',
+    component: () => import('../views/my/common/Balance.vue')
   },
 
 
