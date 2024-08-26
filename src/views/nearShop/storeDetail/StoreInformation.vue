@@ -469,11 +469,13 @@ export default {
         selectStoreEvaluate(storeId) {
             axios.post("http://172.16.7.55:7011/nearShop/storeEvaluate/selectCommentsVoByStoreId?storeId=" + storeId).then(resp => {
                 this.storeEvaluate = resp.data.data;
-                this.storeEvaluate.forEach(item => {
-                    if (item.userName == null) {
-                        item.userName = "匿名用户"
-                    }
-                })
+                if (this.storeEvaluate !== null) {
+                    this.storeEvaluate.forEach(item => {
+                        if (item.userName == null) {
+                            item.userName = "匿名用户"
+                        }
+                    })
+                }
             })
         },
         //通过storeId查询工位

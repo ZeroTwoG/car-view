@@ -109,7 +109,7 @@
 <script>
 import axios from 'axios';
 import VueQr from 'vue-qr';
-
+import { v4 as uuidv4 } from 'uuid';
 export default {
   name: "Payment",
   components: {
@@ -172,8 +172,10 @@ export default {
     }
   },
   created() {
+    const userDataStr = sessionStorage.getItem("user");
+    const userData = JSON.parse(userDataStr);
+    this.userId = userData.userId
     this.getStoreName();
-    this.init();
   },
   methods: {
     onClickOverlay() {
@@ -181,14 +183,6 @@ export default {
     },
     onClickCloseIcon() {
       //取消订单逻辑
-    },
-    //获取用户id
-    init() {
-      axios.get("http://172.16.7.55:7011/mainPage/FrontUser/getUserInfo").then((res => {
-        if (res.data.code === 200) {
-          this.userId = res.data.data.userId;
-        }
-      }));
     },
     //获取门店名
     getStoreName() {
@@ -228,23 +222,20 @@ export default {
         this.show = true;
       }
     },
+
     toPay() {
       //开启支付页面
       this.dialogVisible = true;
       //关闭金额弹窗
       this.show = false;
       //初始化值
-      this.detailNo = "car" + new Date().getTime();
-      this.$http.post("/car/api/getRechargeNative", {
-        rechargeMoney: this.payMoney,
-        discountsMoney: this.freeMoney,
-        accountMoney: this.accountMoney,
-        storeId: this.storeId,
-        userId: this.userId,
-        detailId: this.detailNo,
-      }).then((res => {
-        this.payResult = res.data.data;
-      }));
+      this.detailNo = uuidv4();
+      this.detailNo.substring(4);
+      axios.post("http://172.16.7.55:7011/mainPage/pay/getRechargeNative?rechargeMoney=" + this.payMoney + "&discountsMoney=" + this.freeMoney + "&accountMoney=" + this.accountMoney + "&storeId=" + this.storeId + "&userId=" + this.userId + "&detailId=" + this.detailNo)
+        .then((res => {
+          this.payResult = res.data.data;
+          console.log(res.data, "支付结果");
+        }));
       // 定时任务，看是否成功支付
       this.timer1 = setInterval(() => {
         this.queryPayStatus(this.payResult.orderNo)
@@ -253,7 +244,7 @@ export default {
     //查询订单支付状态
     queryPayStatus(orderNo) {
       if (orderNo !== "") {
-        this.$http.post("/car/api/queryPayStatus/" + this.detailNo).then((res => {
+        axios.post("http://172.16.7.55:7011/mainPage/pay/queryPayStatus/" + orderNo).then((res => {
           if (res.data.code === 200) {
             //消除定时器
             clearInterval(this.timer1);
@@ -261,7 +252,7 @@ export default {
             this.$toast.success("支付成功");
             this.dialogVisible = false;
             this.$router.push(this.url);
-          } else if (res.data.code === 501) {
+          } else if (res.data.msg === "支付失败") {
             //消除定时器
             clearInterval(this.timer1);
             this.timer1 = null;
