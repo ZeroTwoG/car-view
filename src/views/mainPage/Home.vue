@@ -20,6 +20,8 @@
           <img :src="image" style="height: 195px; width: 100%; border-radius: 7px" />
         </van-swipe-item>
       </van-swipe>
+<!--      =============================================================================-->
+      <BDMap style="width: 0px;height: 0px" :father="xyx" @goFather="receptions"></BDMap>
       <!--获取天气-->
       <van-row class="weather">
         <van-col span="5">
@@ -152,11 +154,14 @@
 <script>
 import axios from "axios";
 import { Toast } from "vant";
+import BDMap from "@/views/map/Map.vue";
 
 export default {
+  components: {BDMap},
   data() {
     return {
       isLoading: false, //刷新参数
+      xyx:undefined,
       //选择的地址
       address: {
         storeName: '',
@@ -201,6 +206,12 @@ export default {
     this.getCity();
   },
   methods: {
+    receptions(xys){
+      console.log("获取:::")
+      this.xyx=xys
+      console.log(this.xyx)
+      this.loadAllStore(this.xyx)
+    },
     //获取当前所在的城市
     getCity() {
       fetch(
@@ -253,7 +264,7 @@ export default {
           // myJson 是一个json字符串
           _this.data1 = JSON.parse(myJson); //把json字符串转为json数组
           _this.address.rectangle = _this.data1.rectangle; //获取当前位置的经纬度
-          _this.loadAllStore(_this.address);
+          // _this.loadAllStore(_this.address);
         });
     },
     //点击店铺跳转

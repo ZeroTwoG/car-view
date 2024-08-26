@@ -14,7 +14,7 @@
                         is-link
                         @click="toAddressManagementStore(userId)"
                 >
-                    <!-- 放置图标 -->
+                    <!-- 收货地址 -->
                     <template #title>
                         <div class="custom-title">
                             <van-icon name="map-marked" class="icon"/>
@@ -219,13 +219,17 @@
                 userInfo: {},//用户信息
                 userId: "", //用户id
                 allAddress: [], //存放查询出来的收货地址
-                addressShow: false
+                addressShow: false,
+                TherUser:{},
             }
         },
         created() {
-            this.initUserId();
-            this.loadDatas();
-            // this.init();
+          const userId = sessionStorage.getItem("user");
+          this.TherUser = JSON.parse(userId);
+          this.userId = this.TherUser.userId;
+          this.loadDatas();
+          this.initUserId();
+          // this.init();
         },
         methods: {
             onAdd() {
@@ -234,30 +238,26 @@
                     query: {userId: this.userId},
                 });
             },
-            //获取在AddressManagementStore存储在本地的数据（使用localStorage的方法）
-            // init() {
-            // const myAddress = localStorage.getItem("myAddress")
-            // if (myAddress != null) {
-            //     this.addressData = JSON.parse(myAddress)
-            //     localStorage.removeItem("myAddress");
-            // }
-            // },
             //提交订单时，有收货地址，跳转支付页面
             goPay() {
-                // console.log("this.addressData.id@@@@@@@@@@2222222222222");
-                //
-                // console.log("this.addressData.id", this.addressData.id);
-                // if (this.addressData.id===null || this.addressData.id===undefined ||this.addressData.id==='') {
-                // }else {
                 if (!this.addressData) {
-                    Toast("请输入默认地址信息");
+                  this.hint()
                     return;
                 }
-
-                //生成订单id
-                var orderNo = "product" + new Date().getTime();
-                this.$http.post("/product/mobile/store/api/insertProductOrder", {
-                    orderNo: orderNo,
+              console.log({
+                userId: this.userId,
+                storeId: this.product.storeId,
+                productId: this.product.productId,
+                storeName: this.product.storeName,
+                productName: this.product.productName,
+                productCount: this.totalCount,
+                totalAmount: this.sumPrice,
+                totalIntegral: this.integral,
+                statusCode: this.statusCode,
+                message: this.value,
+                address: this.addressData.addressId,
+              })
+                this.$axios.post("/store/order/insertProductOrder", {
                     userId: this.userId,
                     storeId: this.product.storeId,
                     productId: this.product.productId,
@@ -268,21 +268,17 @@
                     totalIntegral: this.integral,
                     statusCode: this.statusCode,
                     message: this.value,
-                    address: this.addressData.id,
+                    address: this.addressData.addressId,
                 }).then(response => {
-                        console.log("this.addressData.id", this.addressData.id);
-                        console.log("address");
-                        this.$router.push({
-                            path: "/unpaid?statusCode=11",
-                            query: {
-                                data: JSON.stringify(this.product),
-                            },
-                        });
-                        // }
-
+                        console.log("response:", response);
+                        // this.$router.push({
+                        //     path: "/unpaid?statusCode=11",
+                        //     query: {
+                        //         data: JSON.stringify(this.product),
+                        //     },
+                        // });
                     }
                 )
-                // }
             },
 
             //提交订单时，没有写收货地址，执行该方法 给出提示
@@ -320,7 +316,7 @@
                 if (dataParam) {
                     const product = JSON.parse(dataParam);
                     this.product = product;
-                    // console.log("product", this.product)
+                    console.log("product", this.product)
                     //判断积分是否启用
                     if (this.product.integralEnabled == 0) {
                         //积分启用 如果设置现价，就显示积分加现价
@@ -355,40 +351,20 @@
                     }
                 }
             },
-
-            //跳转到地址选择页面
-            // toAddressManagementStore(userId) {
-            //     // this.$router.push({
-            //     //     path: "/AddressManagementStore",
-            //     //     query: {
-            //     //         userId: JSON.stringify(userId), //将query参数中的userId传递给目标页面
-            //     //     },
-            //     // });
-            //     this.addressShow = true
-            // },
-            //查询当前用户Id，传到下一个页面addressManagement中，拿到该用户的地址信息
+            //查询当前用户Id，传到下一个页面addressManagement中，拿到该用户的地址信息ok
             initUserId() {
-                this.$http.get("/car/api/getUserInfo").then((res => {
-                    if (res.data.code === 200) {
-                        this.userInfo = res.data.data;
-                        this.userId = this.userInfo.userId;
-                        this.$http.get("/car/api/selectAddressById/" + this.userId).then((res => {
-                            if (res.data.code === 200) {
-                                if (res.data.data == null) {
-                                    this.addressValue = "暂无地址，去添加";
-                                } else {
-                                    this.addressValue = "";
-                                    this.allAddress = res.data.data;
-                                    const index = this.allAddress.findIndex(item => item.flag == 0)
-                                    this.addressData = this.allAddress[index]
-                                }
-                                // this.allAddress = res.data.data
-                                // // 初始化默认地址
-                                // // findIndex查找元素下标位置
-                                // const index = this.allAddress.findIndex(item => item.flag == 0)
-                                // this.addressData = this.allAddress[index]
-                            }
-                        }))
+              console.log(this.TherUser.userId)
+                this.$axios.get(`/store/order/getUserAndAddressByUserId/${this.TherUser.userId}`).then((res => {
+                  console.log(res.data)
+                  if (res.data.code === 200) {
+                        this.userInfo = res.data.data.user;
+                        this.allAddress = res.data.data.address;
+                        this.addressValue = this.allAddress.length>0?"":"请添加收货地址"
+                        this.addressData = res.data.data.defaultAddress;
+                    console.log("地址:::::")
+                        console.log(this.addressData)
+                        // 初始化默认地址
+                        // findIndex查找元素下标位置
                     }
                 }))
             },

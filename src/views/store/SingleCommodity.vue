@@ -381,7 +381,10 @@
                     .then(resp => {
                       if(resp.data.code==200){
                         this.selectPeopleAndRating = resp.data.data;
+                        console.log(this.selectPeopleAndRating)
                         this.storeimage = this.selectPeopleAndRating.storeImg;
+                        this.product.storeName = this.selectPeopleAndRating.storeName;
+                        this.product.storeimage = this.storeimage
                       }else {
                         this.selectPeopleAndRating=null;
                         this.storeimage=null;
