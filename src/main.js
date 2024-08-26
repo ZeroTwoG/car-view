@@ -20,6 +20,10 @@ import _ from 'lodash';
 Vue.prototype._ = _;
 // 深层拷贝: var data1 = _.cloneDeep(data2);
 
+// BaiDuMap
+import BaiDuMap from '@/views/map/Map.vue'
+Vue.component('BaiDuMap', BaiDuMap)
+
 Vue.use(VueAMap)
 
 // 初始化vue-amap
