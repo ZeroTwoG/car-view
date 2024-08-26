@@ -4,7 +4,7 @@
   <div class="Map" style="background-color: white;margin-bottom: 20px">
     <div id="container"></div>
     <div style="margin-right: 5px;color: white;border-radius: 3px;height: 20px;width: 100%;padding-bottom: 5px;background-color: rgba(0,0,0,0.5)">
-      &nbsp 距离:{{getToDistance}}米 &nbsp 耗时:{{getToTime1}}时{{getToTime2}}分
+      &nbsp 距离:{{getToDistance}} &nbsp 耗时:{{getToTime1}}
     </div>
   </div>
 </template>
@@ -17,7 +17,6 @@ export default {
     return {
       getToDistance:0,
       getToTime1:0,
-      getToTime2:1,
       center: {
         lng: 0,
         lat: 0
@@ -67,11 +66,10 @@ export default {
       console.log("接收父类参数::")
       console.log(this.xy)
       var list = this.xy.split(",")
-
       //出发地
-      var p1 = new BMap.Point(list[0],list[1]);
+      var p2 = new BMap.Point(list[0],list[1]);
       //目的地
-      var p2 = new BMap.Point(list[2],list[3])
+      var p1 = new BMap.Point(list[2],list[3])
 
       var driving = new BMap.DrivingRoute(this.map, {
         renderOptions: {
@@ -83,9 +81,11 @@ export default {
       driving.search(p2, p1);
       this.getToDistance = (map.getDistance(p2, p1)).toFixed(2)
       // console.log(('距离：' + this.getToDistance + '米'))
-      let  getToTime= parseInt(this.getToDistance/40000*60)
-      this.getToTime1 = parseInt(getToTime/60)
-      this.getToTime2 = getToTime%60
+      let  getToTime= parseInt(this.getToDistance*60/1000/40)
+      var times = parseInt(getToTime/60)>0?parseInt(getToTime/60)+"时":0
+      var timess = parseInt(getToTime%60)!=0?times!=0?parseInt(getToTime%60)+"分":parseInt(getToTime%60)+"分钟":"1分钟"
+      this.getToTime1 = (times!=0?times:"")+timess
+      this.getToDistance = this.getToDistance>1000?(this.getToDistance/1000).toFixed(2)+"公里":parseInt(this.getToDistance)+"米"
     }
 
 

@@ -204,6 +204,7 @@
                         </van-col>
                         <van-col span="8"></van-col>
                         <van-col style="color: aqua; font-weight: normal; font-size: 18px;float: left;width: 100%;padding: 14px" span="8">
+<!--                         ==================================================================================-->
                           <BDMap :xy="xys"></BDMap>
                         </van-col>
                     </van-row>
@@ -481,11 +482,11 @@ export default {
                 this.storeEvaluate = resp.data.data;
                 if (resp.data.data!=null) {
                   console.log("通过storeId查询评分")
-                  for (let i = 0; i < this.storeEvaluate.length; i++){
-                    if (this.storeEvaluate[i].userName == null) {
-                      this.storeEvaluate[i] = "匿名用户"
+                  this.storeEvaluate.each(this.storeEvaluate, function (index, item) {
+                    if (item.userName == null) {
+                      item.userName = "匿名用户"
                     }
-                  }
+                  })
                 }
             })
         },

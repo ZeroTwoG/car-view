@@ -32,7 +32,7 @@ export default {
       map: null,
       //搜索参数
       searchLocationValue: '',
-      address:'',
+      address:[],
       xyaddress: '',
       local: null
     }
@@ -53,13 +53,6 @@ export default {
 
       // 创建标注
       this.map.addOverlay(new BMap.Marker(initPoint));
-
-      const _this = this;
-      const ther = {
-        xy:''
-      };
-      this.address= _this.address
-      this.xyaddress=_this.xyaddress
     },
     /**
      * 获取自己的位置
@@ -77,6 +70,7 @@ export default {
           _this.center.lat = r.point.lat;
               console.log(_this.address)
           console.log("当前位置经纬度:", r.point.lng,r.point.lat);
+          sessionStorage.setItem("place", r.point.lng+","+r.point.lat);
         } else {
           console.log('获取失败');
         }
@@ -112,7 +106,13 @@ export default {
     //初始化地图
     // this.goFather(t)
     this.initMap();
-    this.fixedPosition();
+
+    if(sessionStorage.getItem("place")!=null){
+      this.xyaddress = sessionStorage.getItem("place").split(",")
+      this.goFather(this.xyaddress[0]+","+this.xyaddress[1])
+    }else {
+      this.fixedPosition();
+    }
   },
 
 
