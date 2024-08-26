@@ -21,7 +21,7 @@
         </van-swipe-item>
       </van-swipe>
 <!--      =============================================================================-->
-      <BDMap style="width: 0px;height: 0px" :father="xyx" @goFather="receptions"></BDMap>
+      <BDMaps style="width: 0px;height: 0px" @goFathers="reception"></BDMaps>
       <!--获取天气-->
       <van-row class="weather">
         <van-col span="5">
@@ -91,7 +91,7 @@
           </van-col>
         </van-row>
         <div id="storeMsg" style="margin-bottom: 50px">
-          <div v-for="item in store" @click="goStoreInfo(item.storeId, item.averageStar, item.storeDistance)">
+          <div v-for="item in store" @click="goStoreInfo(item)">
             <van-card :thumb="item.storeimage" style="background-color: white">
               <template #tags>
                 <!--门店名称-->
@@ -154,14 +154,15 @@
 <script>
 import axios from "axios";
 import { Toast } from "vant";
-import BDMap from "@/views/map/Map.vue";
+import BDMaps from "@/views/map/Maps.vue";
 
 export default {
-  components: {BDMap},
+  components: {BDMaps:BDMaps},
   data() {
     return {
       isLoading: false, //刷新参数
-      xyx:undefined,
+      xyx:"",
+      xyxs:"",
       //选择的地址
       address: {
         storeName: '',
@@ -202,15 +203,16 @@ export default {
     }
   },
   created() {
-    this.getLocationInfo();
+    // this.getLocationInfo();
     this.getCity();
   },
   methods: {
-    receptions(xys){
-      console.log("获取:::")
-      this.xyx=xys
-      console.log(this.xyx)
-      this.loadAllStore(this.xyx)
+    //接收子类发送的定位信息
+    reception(t){
+      console.log("父类接收子类方法:::")
+      console.log(t)
+      this.xyxs = t
+      this.loadAllStore();
     },
     //获取当前所在的城市
     getCity() {
@@ -265,24 +267,29 @@ export default {
           // myJson 是一个json字符串
           _this.data1 = JSON.parse(myJson); //把json字符串转为json数组
           _this.address.rectangle = _this.data1.rectangle; //获取当前位置的经纬度
-          // _this.loadAllStore(_this.address);
         });
     },
     //点击店铺跳转
-    goStoreInfo(storeId, averageStar, storeDistance) {
+    goStoreInfo(data) {
+      console.log("点击店铺跳转")
+      console.log(data)
       this.$router.push({
         path: "/StoreInformation",
         query: {
-          storeId: storeId,
-          averageStar: averageStar,
-          storeDistance: storeDistance,
+          storeId: data.storeId,
+          averageStar: data.averageStar,
+          storeDistance: data.storeDistance,
+          address:this.xyxs+","+data.longitude+","+data.latitude+"",
         },
       });
     },
     //加载所有店铺信息
-    loadAllStore(address) {
-      axios.get("http://172.16.7.55:7011/mainPage/store/selectStore?rectangle=" + address.rectangle + "&storeName=" + address.storeName).then(resp => {
+    loadAllStore() {
+      console.log("进入方法")
+      console.log(this.address.storeName)
+      axios.get("http://172.16.7.55:7011/mainPage/store/selectStore?rectangle=" + "1,2;"+this.xyxs+"" + "&storeName=" + this.address.storeName).then(resp => {
         this.store = resp.data.data;
+        console.log(this.store)
         this.storeLength = this.store.length;
         //默认距离优先
         this.selectDistance();
