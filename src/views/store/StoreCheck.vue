@@ -44,14 +44,14 @@
                 <van-image
                         width="70"
                         height="70"
-                        :src="storeimage"
+                        :src="selectPeopleAndRating.storeImg"
                         radius="8px"
                         style="float: left"
                 ></van-image>
                 <div style="margin-left: 85px">
                     <div style="display: flex; align-items: center; margin: 10px 0;">
                         <div style="flex-grow: 1; margin-top: -22px">
-                            {{ product.storeName }}
+                            {{ selectPeopleAndRating.storeName }}
                         </div>
                         <div style="display: flex; align-items: center;">
                             <van-button @click="Dialog" round type="info" style="margin-left: 4px;">
@@ -74,26 +74,13 @@
                 </div>
             </van-col>
         </van-row>
-        <!--        <div style="margin-top: 15px">-->
-        <!--            <van-swipe :autoplay="3000">-->
-        <!--                <van-swipe-item-->
-        <!--                        v-for="(image, index) in images"-->
-        <!--                        :key="index"-->
-        <!--                >-->
-        <!--                    <img-->
-        <!--                            v-lazy="image"-->
-        <!--                            :src="image"-->
-        <!--                            style="height: 300px; width: 460px; border-radius: 7px"-->
-        <!--                    />-->
-        <!--                </van-swipe-item>-->
-        <!--            </van-swipe>-->
-        <!--        </div>-->
-        <!--  activeTab 不根据索引匹配，根据名称匹配-->
+<!--          activeTab 不根据索引匹配，根据名称匹配-->
         <van-tabs
                 v-model="activeTab"
                 color="#1989FA"
                 title-active-color="#1989FA"
                 @change="handleTabChange"
+                name="a"
         >
             <!-- 标签页 -->
             <van-tab
@@ -177,6 +164,7 @@
             <van-tab
                     title="销量"
                     name="b"
+                    @change="handleTabChange"
             >
                 <van-grid
                         :border="false"
@@ -262,7 +250,7 @@
                         <van-icon
                                 class="tab-icon"
                                 :name="sortDirection ? 'arrow-up' : 'arrow-down'"
-                                @click="handleIconClick"
+                                @click="priceSort"
                         />
                     </div>
                 </template>
@@ -351,11 +339,6 @@
         name: "StoreCheck",
         data() {
             return {
-                images: [
-                    require("@/assets/img/carousel/商城轮播图片3.png"),
-                    require("@/assets/img/carousel/门店图片轮播3.png"),
-                    require("@/assets/img/carousel/门店轮播图片1.png"),
-                ],
                 activeTab: "",
                 product: {storeId: ''}, //存放从商品页面拿到的门店信息
                 products: [],
@@ -372,105 +355,55 @@
         },
         created() {
             this.optionProductByStoreId();
+            this.selectPeopleAndRatingByStoreId();
         },
         methods: {
             //搜索框查询时间 当点击回车 或者在手机键盘中点击搜索触发
             onSearch() {
                 this.optionProductByStoreId();
             },
-            //点击价格图标事件
-            handleIconClick() {
-                // 切换排序方向
-                this.sortDirection = !this.sortDirection;
-                // 新建排序函数
-                const compareFunction = (a, b) => {
-                    // 如果a和b都有new_price，则按new_price排序
-                    if (a.new_price && b.new_price && a.new_price !== null && a.new_price !== 0 && b.new_price !== null && b.new_price !== 0) {
-                        if (this.sortDirection) {
-                            return a.new_price - b.new_price;
-                        } else {
-                            return b.new_price - a.new_price;
-                        }
-                    }
-                    // 如果a没有new_price，但b有new_price，则把a排在后面
-                    else if (!a.new_price && b.new_price && b.new_price !== null && b.new_price !== 0) {
-                        if (this.sortDirection) {
-                            return 1;
-                        } else {
-                            return -1;
-                        }
-                    }
-                    // 如果a有new_price，但b没有new_price，则把b排在后面
-                    else if (a.new_price && (!b.new_price || b.new_price === null || b.new_price === 0)) {
-                        if (this.sortDirection) {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
-                    }
-                    // 如果a和b都没有new_price但有integral，则按integral排序
-                    else if (a.integral && b.integral) {
-                        if (this.sortDirection) {
-                            return a.integral - b.integral;
-                        } else {
-                            return b.integral - a.integral;
-                        }
-                    }
-                    // 如果a没有new_price，也没有integral，则把a排在后面
-                    else if (!a.new_price && !b.new_price && (!a.integral || !b.integral)) {
-                        if (this.sortDirection) {
-                            return 1;
-                        } else {
-                            return -1;
-                        }
-                    }
-                    // 如果b没有new_price，也没有integral，则把b排在后面
-                    else if (!b.new_price && !a.new_price && (!a.integral || !b.integral)) {
-                        if (this.sortDirection) {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
-                    }
-                    // 如果代码执行到这里，意味着a和b都有new_price但其中至少一个为0/null，按integral排序
-                    else {
-                        if (this.sortDirection) {
-                            return a.integral - b.integral;
-                        } else {
-                            return b.integral - a.integral;
-                        }
-                    }
-                };
-                // 用新的排序函数重新排序
-                this.products.sort(compareFunction);
-            },
-
-
-            //点击标签时，拿到商品类型id查询到该类型的商品
-            handleTabChange(name) {
-                //如果标签为综合查询，就根据当前门店查所有
-                if (name == "a") {
-                    //清空顺序标识
-                    this.priceOrder = "";
-                    this.optionProductByStoreId();
-                } else if (name == "c") {
-                    //判断this.product.priceOrder的值
-                    if (this.priceOrder == "") {
-                        //改为降序 避免点击完其他tab后，没有点到图标，而是点到tab查询的
-                        this.sortDirection = true;
-                    }
-                    //标签为价格标签，默认按升序
-                    //判断priceOrder是1还是0  1 是倒序 0是正序
-                    this.optionProductByStoreId();
-                } else if ((name = "b")) {
-                    //根据销量查询
-                    this.priceOrder = 2;
-                    this.optionProductByStoreId();
-                }
-            },
-
+          //点击标签时，拿到商品类型id查询到该类型的商品
+          handleTabChange(name) {
+              console.log("标签切换")
+            console.log(name)
+              //如果标签为综合查询，就根据当前门店查所有
+              if (name == "a") {
+              //重新查询(恢复默认)
+              this.optionProductByStoreId();
+              } else if (name == "b") {
+                //根据销量查询
+                this.numSort()
+              } else if (name = "c") {
+                //标签为价格标签，默认按升序
+                this.priceSort();
+              }
+          },
+          //点击价格图标事件
+          priceSort() {
+            console.log("价格排序")
+            // 切换排序方向
+            this.sortDirection = !this.sortDirection;
+            // 用新的排序函数重新排序
+            this.products.sort(( a, b) => {
+              let as = (a!=null&&a.newPrice>0)?a.newPrice:"0."+a.integral;
+              let bs = (b!=null&&b.newPrice>0)?b.newPrice:"0."+b.integral;
+              if(this.sortDirection){
+                return as-bs;
+              }else{
+                return bs-as;
+              }
+            });
+          },
+          //点击销量图标事件
+          numSort(){
+            console.log("销量排序")
+            this.products.sort(( a, b) => {
+                return b.monthlySales-a.monthlySales;
+            });
+          },
+          //查询门店评价星级
             optionProductByStoreId() {
-                //拿到上个页面传过来的参数
+                // 拿到上个页面传过来的参数
                 const dataParam = this.$route.query.data;
                 //将数据解析为对象或者数据
                 if (dataParam) {
@@ -479,23 +412,29 @@
                     this.storeimage = storeIdData.storeimage
                     //给门店评分赋值
                     this.selectPeopleAndRating.rating=storeIdData.averageStar
-                    this.$http.post("/product/mobile/store/api/selectProductAndStoreNameByStoreId?productName=" + this.productName + "&storeId=" + storeIdData.storeId)
+                  console.log(storeIdData.storeId)
+                  //查询商品列表
+                    this.$axios.get("/store/check/selectAllProduckByStoreIdOrProductName?productName=" + this.productName + "&storeId=" + storeIdData.storeId)
                         .then(response => {
                             this.products = response.data.data;
+                          console.log("商品列表")
+                          console.log(this.products)
                             //执行查询门店星级
-                            this.selectPeopleAndRatingByStoreId();
                         })
                 }
             },
             //拿到店铺的星级
             selectPeopleAndRatingByStoreId() {
                 const data = this.$route.query.data;
+              console.log("店铺")
                 if (data) {
                     const product = JSON.parse(data);
                     this.product = product;
+                  console.log(product)
                 }
-                this.$http.post("/product/mobile/store/api/selectStoreNameAndRatingByStoreName?storeName=" + this.product.storeName)
+                this.$axios.get(`/store/product/selectTbStoreEvaluate/${this.product.storeId}`)
                     .then(resp => {
+                      console.log("商店:::"+resp.data)
                         this.selectPeopleAndRating = resp.data.data;
                     })
             },

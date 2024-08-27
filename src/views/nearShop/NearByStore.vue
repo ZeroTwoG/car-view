@@ -51,7 +51,7 @@
 
             <!-- 门店信息模块 -->
             <div id="storeMsg" style="margin-bottom: 50px">
-                <div v-for="item in store" @click="goStoreInfo(item.storeId, item.averageStar, item.storeDistance)">
+                <div v-for="item in store" @click="goStoreInfo(item)">
                     <van-card :thumb="item.storeimage">
                         <template #tags>
                             <!--门店名称-->
@@ -112,6 +112,8 @@ import axios from "axios";
 export default {
     data() {
         return {
+          //百度定位
+            xys:[],
             //搜索框默认区域
             region: '区域',
             //默认长度
@@ -153,6 +155,7 @@ export default {
         }
     },
     created() {
+        this.xys = sessionStorage.getItem("place").split(",")
         this.getLocationInfo();
     },
     methods: {
@@ -174,7 +177,7 @@ export default {
         },
         //加载所有店铺信息
         loadAllStore(address) {
-            axios.get("http://172.16.7.55:7011/mainPage/store/selectStore?rectangle=" + address.rectangle + "&storeName=" + address.storeName).then(resp => {
+            axios.get("http://172.16.7.55:7011/mainPage/store/selectStore?rectangle=" + "1,2;"+this.xys[0]+","+this.xys[1] + "&storeName=" + address.storeName).then(resp => {
                 this.store = resp.data.data;
             })
             this.address.storeName = '';
@@ -273,13 +276,14 @@ export default {
             this.showSort = false;
         },
         //点击店铺跳转
-        goStoreInfo(storeId, averageStar, storeDistance) {
+        goStoreInfo(data) {
             this.$router.push({
                 path: "/StoreInformation",
                 query: {
-                    storeId: storeId,
-                    averageStar: averageStar,
-                    storeDistance: storeDistance,
+                    storeId: data.storeId,
+                    averageStar: data.averageStar,
+                    storeDistance: data.storeDistance,
+                    address:this.xys[0]+","+this.xys[1]+","+data.longitude+","+data.latitude+"",
                 },
             });
         }

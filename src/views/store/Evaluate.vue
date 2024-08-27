@@ -17,9 +17,9 @@
                         <van-col>
                             <a class="bu" @click="allCom" style="width: 70px" type="default">全部</a>
                         </van-col>
-<!--                        <van-col>-->
-<!--                            <a class="bu" @click="havePic" style="width: 70px" type="default">有图</a>-->
-<!--                        </van-col>-->
+                        <van-col>
+                            <a class="bu" @click="havePic" style="width: 70px" type="default">有图</a>
+                        </van-col>
                         <van-col>
                             <a class="bu" @click="greatCom" style="width: 70px" type="default">好评</a>
                         </van-col>
@@ -36,20 +36,12 @@
                         v-for="item in evaluateDetail"
                 >
                     <van-row style="margin-top: 20px; font-size: 12px">
-<!--                        <van-col-->
-<!--                                span="4">-->
-<!--                            <van-image round-->
-<!--                                       width="2rem"-->
-<!--                                       height="2rem"-->
-<!--                                       :src="item.imageUrl"-->
-<!--                                       style="margin-left: 25px"/>-->
-<!--                        </van-col>-->
                         <van-col
                                 span="4">
                             <van-image round
                                        width="2rem"
                                        height="2rem"
-                                       :src="imageUrlss"
+                                       :src="item.imageUrl"
                                        style="margin-left: 25px"/>
                         </van-col>
                         <van-col
@@ -77,9 +69,12 @@
                             {{item.content}}
                         </van-col>
                     </van-row>
-<!--                    <van-row style="margin-left: 30px">-->
-<!--                        <van-image v-if="item.imageUrl!==''&item.imageUrl!=null" :src="item.imageUrl"></van-image>-->
-<!--                    </van-row>-->
+                  <div v-if="item.img!==''&item.img!=null" v-for="items in item.img">
+                    <van-row style="margin-left: 30px">
+                      <img :src="items.imageUrl" width="90px" height="90px" style="border: 1px solid rgba(157,157,157,0.1);border-radius: 5px"/>
+                    </van-row>
+                  </div>
+
                 </div>
             </van-pull-refresh>
         </div>
@@ -102,9 +97,9 @@
             return {
                 count: 0,
                 productReviews: {}, //查询到的评论
-                // review: { productId: "", reviewType: "", onlyWithImages: false },
-                // ReviewTypeCount:{},//商品评价类型的数量
-                // ReviewImageCount:{},//商品带图片的数量
+                review: { productId: "", reviewType: "", onlyWithImages: false },
+                ReviewTypeCount:{},//商品评价类型的数量
+                ReviewImageCount:{},//商品带图片的数量
                 total: 0,//评论总数量
 
 
@@ -121,7 +116,7 @@
             this.productId = this.$route.query.data;
             this.selectProductEvaluate(this.productId)
             this.allCom();
-            // this.havePic();
+            this.havePic();
             this.greatCom();
             this.mCom();
             this.badCom();
@@ -129,15 +124,23 @@
         },
         methods: {
 
-            //通过productId查询评分
+            //通过productId查询评分ok
             selectProductEvaluate(productId) {
               console.log("productId:",productId)
               this.$axios.post(`/store/evaluate/selectTbProduckreviewByProductId/${productId}`).then(resp => {
-
-                    this.evaluateDetail = resp.data.data;
-                    console.log(this.evaluateDetail)
-
-                    this.detail = resp.data.data;
+                    let datas = resp.data.data;
+                    console.log(datas)
+                //伪实体vo
+                    for (let i = 0; i < datas.length; i++){
+                      datas[i].userName=datas[i].user.userName;
+                      datas[i].imageUrl=datas[i].user.avatar;
+                      datas[i].evaluateTime=datas[i].text.createTime;
+                      datas[i].content=datas[i].text.content;
+                      datas[i].imageUrlss=datas[i].image;
+                      datas[i].rating=datas[i].text.rating;
+                    }
+                    this.evaluateDetail=datas;
+                    this.detail = datas;
                     this.allCom();
                 })
             },
@@ -153,21 +156,21 @@
                 firstElement.style.border = '1px solid #019FE8';
                 this.evaluateDetail = this.detail;
             },
-            // //有图
-            // havePic() {
-            //     this.evaluateDetail = this.detail;
-            //     let all = document.querySelectorAll('.bu');
-            //     all.forEach(function (element) {
-            //         element.style.backgroundColor = '#F8F8F8';
-            //         element.style.border = '1px solid #F8F8F8';
-            //     });
-            //     let firstElement = document.querySelectorAll('.bu')[1];
-            //     firstElement.style.backgroundColor = '#E5F5FD';
-            //     firstElement.style.border = '1px solid #019FE8';
-            //     this.evaluateDetail = this.evaluateDetail.filter(function (item) {
-            //         return item.imageUrl != null && item.imageUrl !== "";
-            //     });
-            // },
+            //有图
+            havePic() {
+                this.evaluateDetail = this.detail;
+                let all = document.querySelectorAll('.bu');
+                all.forEach(function (element) {
+                    element.style.backgroundColor = '#F8F8F8';
+                    element.style.border = '1px solid #F8F8F8';
+                });
+                let firstElement = document.querySelectorAll('.bu')[1];
+                firstElement.style.backgroundColor = '#E5F5FD';
+                firstElement.style.border = '1px solid #019FE8';
+                this.evaluateDetail = this.evaluateDetail.filter(function (item) {
+                    return item.img[0] != null && item.img[0] !== "";
+                });
+            },
             //好评
             greatCom() {
                 this.evaluateDetail = this.detail;
@@ -177,7 +180,7 @@
                     element.style.backgroundColor = '#F8F8F8';
                     element.style.border = '1px solid #F8F8F8';
                 });
-                let firstElement = document.querySelectorAll('.bu')[1];
+                let firstElement = document.querySelectorAll('.bu')[2];
                 firstElement.style.backgroundColor = '#E5F5FD';
                 firstElement.style.border = '1px solid #019FE8';
                 this.evaluateDetail = this.evaluateDetail.filter(function (item) {
@@ -193,7 +196,7 @@
                     element.style.backgroundColor = '#F8F8F8';
                     element.style.border = '1px solid #F8F8F8';
                 });
-                let firstElement = document.querySelectorAll('.bu')[2];
+                let firstElement = document.querySelectorAll('.bu')[3];
                 firstElement.style.backgroundColor = '#E5F5FD';
                 firstElement.style.border = '1px solid #019FE8';
                 this.evaluateDetail = this.evaluateDetail.filter(function (item) {
@@ -209,7 +212,7 @@
                     element.style.backgroundColor = '#F8F8F8';
                     element.style.border = '1px solid #F8F8F8';
                 });
-                let firstElement = document.querySelectorAll('.bu')[3];
+                let firstElement = document.querySelectorAll('.bu')[4];
                 firstElement.style.backgroundColor = '#E5F5FD';
                 firstElement.style.border = '1px solid #019FE8';
                 this.evaluateDetail = this.evaluateDetail.filter(function (item) {

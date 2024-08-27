@@ -197,17 +197,20 @@
               font-size: 16px;
               margin-bottom: 5px;
               margin-top: 10px;
+              float: left;
+              width: 100%;
             ">
                             路线
                         </van-col>
                         <van-col span="8"></van-col>
-                        <van-col style="color: aqua; font-weight: normal; font-size: 18px;" span="8">
+                        <van-col style="color: aqua; font-weight: normal; font-size: 18px;float: left;width: 100%;padding: 14px" span="8">
+<!--                         ==================================================================================-->
+                          <BDMap :xy="xys"></BDMap>
                         </van-col>
                     </van-row>
                     <van-row style="margin-top: 10px;margin-left: 10px">
                         <van-col style="
               text-align: left;
-
               margin-bottom: 10px;
               margin-left: 10px;
            " span="20">
@@ -278,7 +281,12 @@
 import { Toast } from "vant";
 import * as echarts from "echarts";
 import axios from "axios";
+import BDMap from "@/views/map/Map.vue"
+
 export default {
+  components :{
+    BDMap:BDMap
+  },
     setup() {
         const onClickLeft = () => history.back();
         return {
@@ -287,6 +295,8 @@ export default {
     },
     data() {
         return {
+            xys:"",
+            xyy:"",
             active: "search",
             isLoading: false, //刷新参数
             storeId: "",
@@ -321,6 +331,7 @@ export default {
         const userData = JSON.parse(userDataStr);
         this.userId = userData.userId
         this.storeId = this.$route.query.storeId;
+        this.xys = this.$route.query.address
         this.averageStar = parseFloat(this.$route.query.averageStar);
         this.storeDistance = parseFloat(this.$route.query.storeDistance);
         this.selectStore(this.storeId);
@@ -469,12 +480,13 @@ export default {
         selectStoreEvaluate(storeId) {
             axios.post("http://172.16.7.55:7011/nearShop/storeEvaluate/selectCommentsVoByStoreId?storeId=" + storeId).then(resp => {
                 this.storeEvaluate = resp.data.data;
-                if (this.storeEvaluate !== null) {
-                    this.storeEvaluate.forEach(item => {
-                        if (item.userName == null) {
-                            item.userName = "匿名用户"
-                        }
-                    })
+                if (resp.data.data!=null) {
+                  console.log("通过storeId查询评分")
+                  this.storeEvaluate.each(this.storeEvaluate, function (index, item) {
+                    if (item.userName == null) {
+                      item.userName = "匿名用户"
+                    }
+                  })
                 }
             })
         },
