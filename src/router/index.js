@@ -47,6 +47,14 @@ const routes = [
     path: '/carWashCalendar',
     component: () => import('../views/mainPage/CarWashCalendar.vue')
   },
+  {
+    path: '/SettlementIsOpen',
+    component: () => import('../views/mainPage/SettlementIsOpen.vue')
+  },
+  {
+    path: '/CarWashTicket',
+    component: () => import('../views/mainPage/CarWashTicket.vue')
+  },
   // 附近门店
   {
     path: '/nearByStore',
@@ -116,6 +124,10 @@ const routes = [
   {
     path: '/balance',
     component: () => import('../views/my/common/Balance.vue')
+  },
+  {
+    path: '/payChooseStore',
+    component: () => import('../views/my/common/PayChooseStore.vue')
   },
 
 

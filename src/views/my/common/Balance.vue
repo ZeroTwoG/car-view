@@ -7,7 +7,7 @@
         <!-- 标题 -->
         <van-row class="titleStyle">
           <van-col span="5" @click="jump('/my')" style="color: #f8f8f8; font-size: 18px;">
-            <van-icon name="arrow-left"/>
+            <van-icon name="arrow-left" />
           </van-col>
           <van-col span="14">
             <span style="color: #f8f8f8; font-size: 16px;font-weight: 550">我的余额</span>
@@ -25,7 +25,8 @@
         </div>
       </div>
       <div style="text-align: center;height: 80px;display: flex;justify-content: center; align-items: center;">
-        <van-button @click="jump('/payment')" round style="width: 150px;color: white;background-color:#019fe8;margin-right: 10px">充值
+        <van-button @click="jump('/payment')" round
+          style="width: 150px;color: white;background-color:#019fe8;margin-right: 10px">充值
         </van-button>
         <van-button round style="width: 150px;color: #01abee;border: 1px solid #01abee">兑换余额</van-button>
       </div>
@@ -33,7 +34,7 @@
         <van-col span="6">绑定的门店</van-col>
         <van-col span="16"></van-col>
         <van-col span="2">
-          <van-icon name="arrow" style="margin-left: 5px"/>
+          <van-icon name="arrow" style="margin-left: 5px" />
         </van-col>
       </van-row>
       <van-row style="margin-top: 15px" class="myJump" @click="jumpDetail()">
@@ -41,15 +42,17 @@
         <van-col span="13"></van-col>
         <van-col span="6">
           <span style="color:#3bb6ef">查看全部</span>
-          <van-icon name="arrow"/>
+          <van-icon name="arrow" />
         </van-col>
       </van-row>
-      <van-empty description="暂无数据"/>
+      <van-empty description="暂无数据" />
       <!-- 常用功能 -->
     </van-pull-refresh>
   </div>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
   name: "Balance",
   setup() {
@@ -67,32 +70,26 @@ export default {
     }
   },
   created() {
-    this.init();
+    const userDataStr = sessionStorage.getItem("user");
+    const userData = JSON.parse(userDataStr);
+    this.userId = userData.userId
+    this.selectTotalIntegral()
+    this.selectTotalBalance();
   },
   methods: {
-    //初始化
-    init() {
-      this.$http.get("/car/api/getUserInfo").then((res => {
-        if (res.data.code === 200) {
-          this.userId = res.data.data.userId;
-          this.selectTotalIntegral(this.userId);
-          this.selectTotalBalance(this.userId);
-        }
-      }));
-    },
     //积分总额
-    selectTotalIntegral(id) {
-      this.$http.post("/car/api/selectIntegralByUserId?id=" + id).then((res => {
+    selectTotalIntegral() {
+      axios.post("http://172.16.7.55:7011/my/userIntegral/selectIntegralByUserId/" + this.userId).then(res => {
         if (res.data.code === 200) {
-          this.credits = res.data.data.credits;
+          this.credits = res.data.data;
         }
-      }))
+      })
     },
     //余额
-    selectTotalBalance(id) {
-      this.$http.post("/car/api/selectBalanceByUserId?id=" + id).then((res => {
+    selectTotalBalance() {
+      axios.post("http://172.16.7.55:7011/my/userBalance/selectBalanceByUserId/" + this.userId).then((res => {
         if (res.data.code === 200) {
-          this.balance = res.data.data.balance;
+          this.balance = res.data.data;
         }
       }))
     },
@@ -100,7 +97,8 @@ export default {
     onRefresh() {
       setTimeout(() => {
         this.$toast("刷新成功");
-        this.init();
+        this.selectTotalIntegral()
+        this.selectTotalBalance(this.userId);
         this.isLoading = false;
         //调用请求
       }, 1000);
@@ -108,17 +106,17 @@ export default {
     jumpDetail() {
       this.$router.push({
         path: "/detailBalance",
-        query: {userId: this.userId},
+        query: { userId: this.userId },
       })
     },
     //跳转
     jump(uri) {
       this.$router.push(
-          uri,
-          () => {
-          },
-          () => {
-          }
+        uri,
+        () => {
+        },
+        () => {
+        }
       );
     },
   }

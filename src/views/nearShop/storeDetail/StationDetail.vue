@@ -122,6 +122,7 @@ export default {
         },
         storeBindMsg() {
             axios.post("http://172.16.7.55:7011/nearShop/userBalance/selectStoreBind?userId=" + this.userId + "&storeId=" + this.storeId).then(resp => {
+                console.log(resp.data);
                 if (resp.data.code === 200) {
                     this.storeBindDetail = resp.data.data;
                     this.storeBindDetail = this.storeBindDetail.filter(item => {
@@ -129,6 +130,11 @@ export default {
                             item.amount = "0.00"
                         }
                         return item.storeId == this.storeId;
+                    });
+                } else {
+                    this.$dialog.alert({
+                        title: "提示",
+                        message: "请先充值",
                     });
                 }
 

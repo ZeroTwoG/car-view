@@ -178,12 +178,6 @@ export default {
     this.getStoreName();
   },
   methods: {
-    onClickOverlay() {
-      //取消订单逻辑
-    },
-    onClickCloseIcon() {
-      //取消订单逻辑
-    },
     //获取门店名
     getStoreName() {
       this.storeId = this.$route.query.storeId;
