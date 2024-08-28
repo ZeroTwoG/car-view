@@ -400,7 +400,7 @@
                     const product = JSON.parse(data);
                     this.product = product;
                 }
-              this.$axios.get(`/store/product/selectTbProduckreviewByProductId/${this.product.productId}`)
+              this.$axios.get(`/store/prod.9uct/selectTbProduckreviewByProductId/${this.product.productId}`)
                     .then(resp => {
                       console.log("查询商品评价")
                       if(resp.data.code==200){

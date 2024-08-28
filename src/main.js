@@ -15,6 +15,7 @@ import axios from 'axios'
 axios.defaults.baseURL = "http://172.16.7.55:7011"
 Vue.prototype.$axios = axios;
 
+
 // 工具类
 import _ from 'lodash';
 Vue.prototype._ = _;
