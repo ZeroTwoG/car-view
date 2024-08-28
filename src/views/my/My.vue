@@ -69,11 +69,11 @@
       <van-cell-group inset style="margin-top: 20px">
         <van-cell title="我的订单" style="font-weight: bold" />
         <van-grid square :gutter="10" :column-num="5" :border="false">
-          <van-grid-item icon="credit-pay" text="待付款" @click="jump('/unpaid?statusCode=11')" />
-          <van-grid-item icon="tosend" text="待发货" @click="jump('/unpaid?statusCode=41')" />
-          <van-grid-item icon="logistics" text="待收货" @click="jump('/unpaid?statusCode=46')" />
-          <van-grid-item icon="comment-circle-o" text="已完成" @click="jump('/unpaid?statusCode=43')" />
-          <van-grid-item icon="close" text="取消" @click="jump('/unpaid?statusCode=30')" />
+          <van-grid-item icon="credit-pay" text="待付款" @click="jump('/unpaid?statusCode=1')" />
+          <van-grid-item icon="tosend" text="待发货" @click="jump('/unpaid?statusCode=2')" />
+          <van-grid-item icon="logistics" text="待收货" @click="jump('/unpaid?statusCode=3')" />
+          <van-grid-item icon="comment-circle-o" text="已完成" @click="jump('/unpaid?statusCode=4')" />
+          <van-grid-item icon="close" text="取消" @click="jump('/unpaid?statusCode=5')" />
         </van-grid>
       </van-cell-group>
       <van-cell-group inset style="margin-top: 20px;margin-bottom: 60px">

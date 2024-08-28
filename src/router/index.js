@@ -129,6 +129,28 @@ const routes = [
     path: '/payChooseStore',
     component: () => import('../views/my/common/PayChooseStore.vue')
   },
+  {
+    path: '/unpaid',
+    component: () => import('@/views/store/oreder/Unpaid.vue')
+  },
+  {
+    path: '/orderDetailed',
+    component: () => import('@/views/store/oreder/OrderDetailed.vue')
+  },
+  {
+    path: '/orderComment',
+    component: () => import('../views/store/oreder/OrderComment.vue')
+  },
+
+
+
+
+
+
+  {
+    path: '/mapAll',
+    component: () => import('../views/map/MapAll.vue')
+  },
 
 
 ]
