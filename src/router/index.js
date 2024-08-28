@@ -55,6 +55,10 @@ const routes = [
     path: '/CarWashTicket',
     component: () => import('../views/mainPage/CarWashTicket.vue')
   },
+  {
+    path: '/StoreComment',
+    component: () => import('../views/mainPage/StoreComment.vue')
+  },
   // 附近门店
   {
     path: '/nearByStore',
@@ -128,6 +132,10 @@ const routes = [
   {
     path: '/payChooseStore',
     component: () => import('../views/my/common/PayChooseStore.vue')
+  },
+  {
+    path: '/carBindStore',
+    component: () => import('../views/my/common/CarBindStore.vue')
   },
 
 

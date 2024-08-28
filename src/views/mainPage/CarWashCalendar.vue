@@ -120,7 +120,7 @@ export default {
   methods: {
     //1,根据token查询当前登录用户信息
     initInfo() {
-      axios.get("http://172.16.7.55:7011/mainPage/FrontUser/getUserInfo?userId=" + this.info.userId).then((res => {
+      axios.get("/mainPage/FrontUser/getUserInfo?userId=" + this.info.userId).then((res => {
         if (res.data.code === 200) {
           this.info.userName = res.data.data.userName;
           this.info.avatar = res.data.data.avatar;
@@ -191,7 +191,7 @@ export default {
       //1，格式化选中的日期
       let tmp = moment(values).format("YYYY-MM-DD");
       //2,请求后端方法
-      axios.post("http://172.16.7.55:7011/nearShop/carWashRecord/selectRecordByUserId?userId=" +
+      axios.post("/nearShop/carWashRecord/selectRecordByUserId?userId=" +
         this.info.userId +
         "&createDate=" +
         tmp
@@ -202,10 +202,12 @@ export default {
             this.carWashInfo = this.carWashInfo.filter(item => {
               return item.washStatus == '1';
             })
+            this.record = ""
             if (this.carWashInfo.length === 0) {
               this.record = "暂无洗车记录";
             }
           } else {
+            this.carWashInfo = [];
             this.record = "暂无洗车记录";
           }
         })
@@ -216,6 +218,8 @@ export default {
 
     //跳转评价页面
     goStoreComment(storeName, orderId, storeId, userId) {
+      console.log(storeName, orderId, storeId, userId);
+
       this.$router.push({
         path: "/StoreComment",
         query: {

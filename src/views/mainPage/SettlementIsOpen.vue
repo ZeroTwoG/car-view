@@ -110,7 +110,6 @@ export default {
         //1,根据门店id查询门店名称
         selectStoreName(storeId) {
             axios.post("http://172.16.7.55:7011/my/store/selectByStoreId?storeId=" + storeId).then(resp => {
-                console.log();
                 this.store = resp.data.data;
             })
         },
@@ -159,7 +158,6 @@ export default {
                     userId: this.orderMsg.userId,
                     storeId: this.orderMsg.storeId,
                     data: JSON.stringify(this.orderMsg),
-
                 },
             });
         },
@@ -183,7 +181,7 @@ export default {
                     this.$dialog
                         .confirm({
                             title: "提示",
-                            message: "不满足优惠券使用条件，是否直接用余额支付",
+                            message: "洗车卷额度高于消费金额，是否使用余额支付",
                             confirmButtonColor: "red",
                         })
                         .then(() => {
@@ -216,16 +214,18 @@ export default {
         },
         //计算的方法
         payCarMoney(form) {
+            form.productId = form.id
+            console.log(form);
+
             axios.post("http://172.16.7.55:7011/my/carWashRecord/payCarMoney", form).then(resp => {
                 if (resp.data.code == 200) {
                     Toast("付款成功")
                     this.jump('home')
-                }
-                if (resp.data.code == 900) {
+                } else {
                     this.$dialog
                         .confirm({
-                            title: "提示",
-                            message: "余额不足，是否要立即充值",
+                            title: "支付错误，请检查余额是否充足，或稍后再试",
+                            message: "点击确认前往充值",
                             confirmButtonColor: "red",
                         })
                         .then(() => {
