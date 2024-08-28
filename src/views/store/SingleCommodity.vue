@@ -8,14 +8,14 @@
             <van-nav-bar title="商品详情" left-text="返回" left-arrow @click-left="goStore"></van-nav-bar>
             <!-- 标题 -->
         </van-sticky>
-        <!--         轮播图：商品图片-->
-        <van-swipe :autoplay="3000">
-            <!-- 循环拿到的该商品的图片 -->
-            <van-swipe-item v-for="(image, index) in productImages" :key="index">
-                <img :src="image" style="height: 300px; width: 100%; border-radius: 7px">
-            </van-swipe-item>
-        </van-swipe>
-        <!--        <img :src="productImages" style="width: 100%; height: 300px; border-radius: 7px"/>-->
+<!--         轮播图：商品图片-->
+                <van-swipe :autoplay="3000">
+                    <!-- 循环拿到的该商品的图片 -->
+                    <van-swipe-item v-for="(image, index) in productImages" :key="index">
+                      <img :src="image" style="height: 300px; width: 100%; border-radius: 7px">
+                    </van-swipe-item>
+                </van-swipe>
+<!--        <img :src="productImages" style="width: 100%; height: 300px; border-radius: 7px"/>-->
         <div style="width: 100%; height: 45px; background-color: #66c6f2">
             <span style="
               font-size: 26px;

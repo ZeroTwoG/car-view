@@ -66,6 +66,7 @@ export default {
         if (res.data.code === 200) {
           sessionStorage.setItem("token", res.data.data.token);
           sessionStorage.setItem("user", JSON.stringify(res.data.data.user));
+          sessionStorage.setItem("name", res.data.data.name);
           this.$message({
             message: res.data.msg,
             type: 'success'

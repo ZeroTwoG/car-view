@@ -108,13 +108,14 @@ export default {
     },
     //点击店铺跳转
     goStoreInfo(date) {
+      console.log(date)
       this.$router.push({
         path: "/StoreInformation",
         query: {
           storeId: date.storeId,
           averageStar: date.averageStar,
           storeDistance: date.storeDistance,
-          address: date.longitude + "," + date.latitude,
+          address: date.longitude+ ","+date.latitude,
         },
       });
     },

@@ -8,7 +8,7 @@
         <van-row style="height: 50px; line-height: 50px; background-color: #ffffff">
           <van-col span="4">
             <!-- 主页提示信息 -->
-            <van-icon name="chat-o" class="myMessage" @click="jump('')" />
+            <van-icon name="chat-o" class="myMessage" @click="jump('/msgHome')" />
           </van-col>
           <van-col span="16" style="text-align: center">ETCC自助洗车</van-col>
           <van-col span="4"></van-col>

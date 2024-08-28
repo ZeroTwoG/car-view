@@ -66,6 +66,13 @@ export default {
       console.log("接收父类参数::")
       console.log(this.xy)
       var list = this.xy.split(",")
+      if(list.length<4){
+        list[2]=list[0]
+        list[3]=list[1]
+        var data = sessionStorage.getItem("place").split(",")
+        list[0]=data[0]
+        list[1]=data[1]
+      }
       //出发地
       var p2 = new BMap.Point(list[0],list[1]);
       //目的地
@@ -80,12 +87,16 @@ export default {
       var map = new BMap.Map('')
       driving.search(p2, p1);
       this.getToDistance = (map.getDistance(p2, p1)).toFixed(2)
+      //计算总需时间(分)
       let  getToTime= parseInt(this.getToDistance*60/1000/40)
+      //计算时间(时)
       var times = parseInt(getToTime/60)>0?parseInt(getToTime/60)+"时":0
+      //计算时间(分)
       var timess = parseInt(getToTime%60)!=0?times!=0?parseInt(getToTime%60)+"分":parseInt(getToTime%60)+"分钟":"1分钟"
+      //输出显示
       this.getToTime1 = (times!=0?times:"")+timess
       this.getToDistance = this.getToDistance>1000?(this.getToDistance/1000).toFixed(2)+"公里":parseInt(this.getToDistance)+"米"
-      console.log(driving)
+      // console.log(driving)
     }
 
 

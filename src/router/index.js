@@ -161,6 +161,43 @@ const routes = [
     path: '/orderComment',
     component: () => import('../views/store/oreder/OrderComment.vue')
   },
+  {
+    path: '/aboutUs',
+    component: () => import('../views/my/amateurish/AboutUs.vue')
+  },
+  {
+    path: '/instructions',
+    component: () => import('../views/my/amateurish/Instructions.vue')
+  },
+  {
+    path: '/serviceAgreement',
+    component: () => import('../views/my/amateurish/ServiceAgreement.vue')
+  },
+  {
+    path: '/systemSetting',
+    component: () => import('../views/my/amateurish/SystemSetting.vue')
+  },
+  {
+    path: '/washCarCourse',
+    component: () => import('../views/my/amateurish/WashCarCourse.vue')
+  },
+  //消息
+  {
+    path: '/msgHome',
+    component: () => import('../views/msg/MsgHome.vue')
+  },
+  {
+    path: '/chatAiMsg',
+    component: () => import('../views/msg/ChatAiMsg.vue')
+  },
+  {
+    path: '/StoreMsg',
+    component: () => import('../views/msg/StoreMsg.vue')
+  },
+  {
+    path: '/TextMsg',
+    component: () => import('../views/msg/TextMsg.vue')
+  },
 
 
 
