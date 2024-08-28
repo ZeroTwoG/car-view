@@ -22,8 +22,8 @@
       <!-- 昵称 -->
       <van-col span="15">
         <div style="padding-top: 20px; float: left; font-size: 20px; color: #fff">
-          <span v-if="userName === '注册/登录'" @click="jump('login')">&nbsp;{{ userName }}</span>
-          <span v-if="userName !== '注册/登录'" @click="jump('personInfo')">&nbsp;{{ userName }}</span>
+          <span v-if="userName === '注册/登录'" @click="jump('login')">注册/登录</span>
+          <span v-else @click="jump('personInfo')">&nbsp;{{ userName }}</span>
         </div>
       </van-col>
       <van-col span="3"></van-col>
@@ -122,27 +122,31 @@ export default {
       isLoading: false, //刷新参数
       active: "my", //底部标签绑定
       userId: "",
-      userName: "注册/登录", //用户名
+      userName: "", //用户名
       imageURL: "https://ts1.cn.mm.bing.net/th/id/R-C.67c70ed0eae200d69455a91b43a9f407?rik=JuGKKn2ExyU9PA&riu=http%3a%2f%2fwww.sucaijishi.com%2fuploadfile%2f2018%2f0508%2f20180508023717621.png&ehk=KU69IZrBC4o1Y88Iab8ZKx9FGLndJcignKsCkX31gds%3d&risl=&pid=ImgRaw&r=0", //头像路径
     }
   },
   created() {
-    this.init();
+    this.userInfo=JSON.parse(sessionStorage.getItem("user"));
+    this.userName = sessionStorage.getItem("name");
+    this.imageURL=this.userInfo.avatar
+    this.userId=this.userInfo.userId
+    // this.init(); 弃用
   },
   methods: {
-    init() {
-      axios.get("http://172.16.7.55:7011/mainPage/FrontUser/getUserInfo").then((res => {
-        if (res.data.code === 200) {
-          console.log(res.data.code);
-          this.userInfo = res.data.data;
-          this.userName = this.userInfo.userName;
-          this.imageURL = this.userInfo.avatar;
-          this.userId = this.userInfo.userId;
-        } else {
-          this.userName = "注册/登录";
-        }
-      }))
-    },
+    // init() { 弃用
+    //   axios.get("http://172.16.7.55:7011/mainPage/FrontUser/getUserInfo").then((res => {
+    //     if (res.data.code === 200) {
+    //       console.log(res.data.code);
+    //       this.userInfo = res.data.data;
+    //       this.userName = this.userInfo.userName;
+    //       this.imageURL = this.userInfo.avatar;
+    //       this.userId = this.userInfo.userId;
+    //     } else {
+    //       this.userName = "注册/登录";
+    //     }
+    //   }))
+    // },
     //刷新方法
     onRefresh() {
       setTimeout(() => {
