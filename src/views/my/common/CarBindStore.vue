@@ -5,13 +5,13 @@
     </van-sticky>
     <!-- 门店信息模块 -->
     <div id="storeMsg" style="margin-bottom: 50px">
-      <div v-for="item in store" @click="goStoreInfo(item.storeId, item.averageStar, item.storeDistance)">
+      <div v-for="item in store" @click="goStoreInfo(item)">
         <van-card :thumb="item.storeimage" style="background-color: white">
           <template #tags>
             <!--门店名称-->
             <van-cell class="storeName" style="font-weight: normal;font-size: 20px;color: black">{{
               item.storeName
-              }}
+            }}
             </van-cell>
             <!--门店星级-->
             <div class="interval">
@@ -78,16 +78,13 @@ export default {
   methods: {
     loadAllStore() {
       this.address.carId = this.$route.query.carId;
-      const userDataStr = sessionStorage.getItem("place");
-      const userData = JSON.parse(userDataStr);
-      this.userId = userData.userId
-      sessionStorage.
-        //加载所有店铺信息
-        axios.post("/mainPage/store/selectDetailStore/" + this.address.carId).then(resp => {
-          this.store = resp.data.data;
-          console.log(this.store);
+      const placeDataStr = sessionStorage.getItem("place");
+      //加载所有店铺信息
+      axios.post("/mainPage/store/selectDetailStore/" + this.address.carId + "/" + placeDataStr).then(resp => {
+        this.store = resp.data.data;
+        console.log(this.store);
 
-        })
+      })
       this.selectHeightStar();
       this.address.storeName = '';
     },
@@ -110,13 +107,14 @@ export default {
       }
     },
     //点击店铺跳转
-    goStoreInfo(storeId, averageStar, storeDistance) {
+    goStoreInfo(date) {
       this.$router.push({
         path: "/StoreInformation",
         query: {
-          storeId: storeId,
-          averageStar: averageStar,
-          storeDistance: storeDistance
+          storeId: date.storeId,
+          averageStar: date.averageStar,
+          storeDistance: date.storeDistance,
+          address: date.longitude + "," + date.latitude,
         },
       });
     },
