@@ -80,12 +80,12 @@ export default {
       var map = new BMap.Map('')
       driving.search(p2, p1);
       this.getToDistance = (map.getDistance(p2, p1)).toFixed(2)
-      // console.log(('距离：' + this.getToDistance + '米'))
       let  getToTime= parseInt(this.getToDistance*60/1000/40)
       var times = parseInt(getToTime/60)>0?parseInt(getToTime/60)+"时":0
       var timess = parseInt(getToTime%60)!=0?times!=0?parseInt(getToTime%60)+"分":parseInt(getToTime%60)+"分钟":"1分钟"
       this.getToTime1 = (times!=0?times:"")+timess
       this.getToDistance = this.getToDistance>1000?(this.getToDistance/1000).toFixed(2)+"公里":parseInt(this.getToDistance)+"米"
+      console.log(driving)
     }
 
 

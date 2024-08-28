@@ -137,6 +137,28 @@ const routes = [
     path: '/carBindStore',
     component: () => import('../views/my/common/CarBindStore.vue')
   },
+  {
+    path: '/unpaid',
+    component: () => import('@/views/store/oreder/Unpaid.vue')
+  },
+  {
+    path: '/orderDetailed',
+    component: () => import('@/views/store/oreder/OrderDetailed.vue')
+  },
+  {
+    path: '/orderComment',
+    component: () => import('../views/store/oreder/OrderComment.vue')
+  },
+
+
+
+
+
+
+  {
+    path: '/mapAll',
+    component: () => import('../views/map/MapAll.vue')
+  },
 
 
 ]

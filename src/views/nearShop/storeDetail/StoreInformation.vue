@@ -270,7 +270,7 @@
                             <van-icon name="card" size="2em" color="#ffffff" /><span
                                 style="position: relative;top: -7px;left: 4px">充值洗车</span></van-button>
                     </van-tabbar-item>
-                    <van-tabbar-item icon="guide-o" @click="storeMap(store.longitude, store.latitude, store.address)">
+                    <van-tabbar-item icon="guide-o" @click="storeMap(store)">
                         位置信息
                     </van-tabbar-item>
                 </van-tabbar>
@@ -348,11 +348,10 @@ export default {
     },
     methods: {
         //跳转地图
-        storeMap(longitude, latitude, address) {
-            console.log(longitude, "===", latitude)
+        storeMap(data) {
             this.$router.push({
-                path: "/StoreMap",
-                query: { longitude: longitude, latitude: latitude, address: address },
+                path: "/mapAll",
+                query: { storeName:data.storeName,address:data.address,xs:data.longitude,ys:data.latitude },
             });
         },
         //查看是否绑定门店
@@ -481,14 +480,11 @@ export default {
         //通过storeId查询评分
         selectStoreEvaluate(storeId) {
             axios.post("http://172.16.7.55:7011/nearShop/storeEvaluate/selectCommentsVoByStoreId?storeId=" + storeId).then(resp => {
+              if(resp.data.code!=500){
                 this.storeEvaluate = resp.data.data;
-                if (resp.data.data != null) {
-                    this.storeEvaluate.each(this.storeEvaluate, function (index, item) {
-                        if (item.userName == null) {
-                            item.userName = "匿名用户"
-                        }
-                    })
-                }
+              }else {
+                // this.$toast("暂无评分");
+              }
             })
         },
         //通过storeId查询工位
