@@ -89,6 +89,18 @@ const routes = [
     path: '/store',
     component: () => import('../views/store/Store.vue')
   },
+  {
+    path: '/AddressManagementStore',
+    component: () => import('../views/store/AddressManagementStore.vue')
+  },
+  {
+    path: '/addressManagement',
+    component: () => import('../views/store/AddressManagement.vue')
+  },
+  {
+    path: '/addressEdit',
+    component: () => import('../views/store/AddressEdit.vue')
+  },
   // 商品评价
   {
     path: '/Evaluate',
@@ -149,7 +161,6 @@ const routes = [
     path: '/orderComment',
     component: () => import('../views/store/oreder/OrderComment.vue')
   },
-
 
 
 

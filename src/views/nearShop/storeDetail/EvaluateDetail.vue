@@ -32,7 +32,7 @@
                 <div v-for="item in evaluateDetail">
                     <van-row style="margin-top: 20px; font-size: 12px">
                         <van-col span="4">
-                            <van-image round width="2rem" height="2rem" :src="item.picture" style="margin-left: 25px" />
+                            <van-image round width="2rem" height="2rem" :src="item.avatar" style="margin-left: 25px" />
                         </van-col>
                         <van-col span="14">
                             <van-row>
@@ -90,12 +90,9 @@ export default {
         selectStoreEvaluate(storeId) {
             axios.post("http://172.16.7.55:7011/nearShop/storeEvaluate/selectCommentsVoByStoreId?storeId=" + storeId).then(resp => {
                 this.evaluateDetail = resp.data.data;
-                this.evaluateDetail.forEach(item => {
-                    if (item.userName == null) {
-                        item.userName = "匿名用户"
-                    }
-                })
                 this.detail = resp.data.data;
+                console.log(this.evaluateDetail);
+
                 this.allCom();
             })
         },

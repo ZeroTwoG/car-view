@@ -85,6 +85,8 @@ export default {
             } else {
                 this.info.userId = this.$route.query.userId;
             }
+            console.log(this.info);
+
             axios.post("/mainPage/storeEvaluate/insertStoreEvaluate", this.info)
                 .then(function (response) {
                     if (response.data.code == 200) {

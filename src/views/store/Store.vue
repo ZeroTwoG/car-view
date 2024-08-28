@@ -14,7 +14,7 @@
 
             <van-swipe class="my-swipe" :autoplay="1500" indicator-color="white">
                 <van-swipe-item v-for="(image) in images">
-                    <img @click="jump('A')" :src="image" style="height: 195px; width: 100%; border-radius: 7px" />
+                    <img :src="image" style="height: 195px; width: 100%; border-radius: 7px" />
                 </van-swipe-item>
             </van-swipe>
 
@@ -155,7 +155,7 @@ export default {
         //查询ProductType方法
         loadProductType() {
             //这里使用funtion传参必须用let _this=this;
-          this.$axios.get("/store/productType/selectAllProductType").then(response => {
+            this.$axios.get("/store/productType/selectAllProductType").then(response => {
                 this.productTypes = response.data.data;
                 this.queryByProduct();
                 this.handleTabChange(this.productTypes[0].commentId);
@@ -172,18 +172,18 @@ export default {
 
         //根据商品类型查询商品
         queryByProduct() {
-          this.$axios.get("/store/product/select?proTypeId=" + this.proTypeId + "&productName=" + this.productName).then(resp => {
-            let datas = resp.data.data;
-            console.log("商品:::")
-            console.log(resp.data.data)
-            if(datas!=null){
-              this.products = datas.tbProduct;
-              for (let i = 0; i < this.products.length; i++){
-                this.products[i].storeId=datas.tbStore[i].storeId;
-                this.products[i].storeName=datas.tbStore[i].storeName;
-                this.storeimage=datas.tbStore[i].storeimage;
-              }
-            }
+            this.$axios.get("/store/product/select?proTypeId=" + this.proTypeId + "&productName=" + this.productName).then(resp => {
+                let datas = resp.data.data;
+                console.log("商品:::")
+                console.log(resp.data.data)
+                if (datas != null) {
+                    this.products = datas.tbProduct;
+                    for (let i = 0; i < this.products.length; i++) {
+                        this.products[i].storeId = datas.tbStore[i].storeId;
+                        this.products[i].storeName = datas.tbStore[i].storeName;
+                        this.storeimage = datas.tbStore[i].storeimage;
+                    }
+                }
 
             })
         },

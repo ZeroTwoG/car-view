@@ -15,7 +15,7 @@
             <!--轮播图-->
             <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
                 <van-swipe-item v-for="(image) in images">
-                    <img @click="jump('AA')" :src="image" style="height: 195px; width: 100%; border-radius: 7px" />
+                    <img :src="image" style="height: 195px; width: 100%; border-radius: 7px" />
                 </van-swipe-item>
             </van-swipe>
             <!--搜索条件框-->
@@ -112,8 +112,8 @@ import axios from "axios";
 export default {
     data() {
         return {
-          //百度定位
-            xys:[],
+            //百度定位
+            xys: [],
             //搜索框默认区域
             region: '区域',
             //默认长度
@@ -171,13 +171,13 @@ export default {
                     _this.data1 = JSON.parse(myJson); //把json字符串转为json数组
                     _this.address.rectangle = _this.data1.rectangle; //获取当前位置的经纬度
                     _this.loadAllStore(_this.address);
-                    // console.log(_this.data1);   //获取位置信息
-                    // console.log(_this.address.rectangle); //获取经纬度
+                    console.log(_this.data1);   //获取位置信息
+                    console.log(_this.address.rectangle); //获取经纬度
                 });
         },
         //加载所有店铺信息
         loadAllStore(address) {
-            axios.get("http://172.16.7.55:7011/mainPage/store/selectStore?rectangle=" + "1,2;"+this.xys[0]+","+this.xys[1] + "&storeName=" + address.storeName).then(resp => {
+            axios.get("/mainPage/store/selectStore?rectangle=" + "1,2;" + this.xys[0] + "," + this.xys[1] + "&storeName=" + address.storeName).then(resp => {
                 this.store = resp.data.data;
             })
             this.address.storeName = '';
@@ -283,7 +283,7 @@ export default {
                     storeId: data.storeId,
                     averageStar: data.averageStar,
                     storeDistance: data.storeDistance,
-                    address:this.xys[0]+","+this.xys[1]+","+data.longitude+","+data.latitude+"",
+                    address: this.xys[0] + "," + this.xys[1] + "," + data.longitude + "," + data.latitude + "",
                 },
             });
         }

@@ -82,7 +82,7 @@ export default {
     },
     //删除绑定的车辆
     dropBindCar(carNo) {
-      axios.delete("http://172.16.7.55:7011/my/car/deleteCarNo/" + carNo).then((res => {
+      axios.delete("/my/car/deleteCarNo/" + carNo).then((res => {
         if (res.data.code === 200) {
           this.$notify({ type: 'success', message: res.data.msg });
           this.initCar();

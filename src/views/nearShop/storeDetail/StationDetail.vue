@@ -121,7 +121,7 @@ export default {
             }
         },
         storeBindMsg() {
-            axios.post("http://172.16.7.55:7011/nearShop/userBalance/selectStoreBind?userId=" + this.userId + "&storeId=" + this.storeId).then(resp => {
+            axios.post("/nearShop/userBalance/selectStoreBind?userId=" + this.userId + "&storeId=" + this.storeId).then(resp => {
                 console.log(resp.data);
                 if (resp.data.code === 200) {
                     this.storeBindDetail = resp.data.data;
@@ -134,7 +134,7 @@ export default {
                 } else {
                     this.$dialog.alert({
                         title: "提示",
-                        message: "请先充值",
+                        message: "余额不足十元，请充值后再试",
                     });
                 }
 

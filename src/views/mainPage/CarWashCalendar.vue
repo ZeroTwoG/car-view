@@ -16,7 +16,7 @@
           <!-- 用户手机号 -->
           <van-col span="16" style="text-align: left">{{
             info.userName
-            }}
+          }}
           </van-col>
         </van-row>
       </van-col>
@@ -191,6 +191,8 @@ export default {
       //1，格式化选中的日期
       let tmp = moment(values).format("YYYY-MM-DD");
       //2,请求后端方法
+      console.log(this.info);
+      
       axios.post("/nearShop/carWashRecord/selectRecordByUserId?userId=" +
         this.info.userId +
         "&createDate=" +
@@ -218,8 +220,6 @@ export default {
 
     //跳转评价页面
     goStoreComment(storeName, orderId, storeId, userId) {
-      console.log(storeName, orderId, storeId, userId);
-
       this.$router.push({
         path: "/StoreComment",
         query: {

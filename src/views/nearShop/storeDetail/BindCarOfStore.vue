@@ -92,10 +92,10 @@ export default {
         },
         //根据token,和门店id查询当前登录用户的添加的车辆
         selectByToken(form) {
-            axios.post("http://172.16.7.55:7011/mainPage/car/selectBindCar?storeId=" + form.storeId + "&userId=" + form.userId).then(resp => {
+            axios.post("/mainPage/car/selectBindCar?storeId=" + form.storeId + "&userId=" + form.userId).then(resp => {
                 this.carList = resp.data.data;
                 if (this.carList.length == 0) {
-                    this.record = "该门店没有绑定车辆"
+                    this.record = "该门店没有可洗车车辆，请添加车辆"
                 }
             })
         },

@@ -158,7 +158,7 @@
                     <div v-for="(item, index) in storeEvaluate" :key="index" v-if="index < 2">
                         <van-row style="margin-top: 20px; font-size: 12px">
                             <van-col span="4">
-                                <van-image round width="2rem" height="2rem" :src="item.picture"
+                                <van-image round width="2rem" height="2rem" :src="item.avatar"
                                     style="margin-left: 25px" />
                             </van-col>
                             <van-col span="14">
@@ -275,7 +275,6 @@
                     </van-tabbar-item>
                 </van-tabbar>
             </van-pull-refresh>
-
         </div>
     </div>
 </template>
@@ -351,7 +350,7 @@ export default {
         storeMap(data) {
             this.$router.push({
                 path: "/mapAll",
-                query: { storeName:data.storeName,address:data.address,xs:data.longitude,ys:data.latitude },
+                query: { storeName: data.storeName, address: data.address, xs: data.longitude, ys: data.latitude },
             });
         },
         //查看是否绑定门店
@@ -473,18 +472,18 @@ export default {
         },
         //通过storeId查店铺
         selectStore(storeId) {
-            axios.post("http://172.16.7.55:7011/nearShop/store/selectByStoreId?storeId=" + storeId).then(resp => {
+            axios.post("/nearShop/store/selectByStoreId?storeId=" + storeId).then(resp => {
                 this.store = resp.data.data;
             })
         },
         //通过storeId查询评分
         selectStoreEvaluate(storeId) {
-            axios.post("http://172.16.7.55:7011/nearShop/storeEvaluate/selectCommentsVoByStoreId?storeId=" + storeId).then(resp => {
-              if(resp.data.code!=500){
-                this.storeEvaluate = resp.data.data;
-              }else {
-                // this.$toast("暂无评分");
-              }
+            axios.post("/nearShop/storeEvaluate/selectCommentsVoByStoreId?storeId=" + storeId).then(resp => {
+                if (resp.data.code != 500) {
+                    this.storeEvaluate = resp.data.data;
+                } else {
+                    // this.$toast("暂无评分");
+                }
             })
         },
         //通过storeId查询工位
