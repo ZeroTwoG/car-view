@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 导航栏 -->
-    <van-nav-bar title="充值" left-arrow @click-left="jump('/balance')" />
+    <van-nav-bar title="充值" left-arrow @click-left="jump('/home')" />
     <!-- 选择门店 -->
     <van-row class="container">
       <van-col span="5" style="font-size: 15px; font-weight: bold">门店名称</van-col>
@@ -89,8 +89,7 @@
       <van-button round type="info" style="width: 90%; margin-top: 10%" @click="toPay">立即充值
       </van-button>
     </van-popup>
-    <van-popup v-model:show="dialogVisible" round closeable :style="{ padding: '50px' }" @click-overlay="onClickOverlay"
-      @click-close-icon="onClickCloseIcon">
+    <van-popup v-model:show="dialogVisible" round closeable :style="{ padding: '50px' }">
       <div style="text-align: center">
         <p>微信支付 {{ payResult.price }}元</p>
         <div style="border: 1px solid #f3f3f3;width: 220px;padding: 10px; margin: 0 auto">

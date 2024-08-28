@@ -95,11 +95,6 @@ export default {
                 query: { storeId: radio },
             });
         },
-
-        //返回上一级
-        returnTo() {
-            this.$router.push("/addMyCar");
-        },
     },
     //声明注解
     components: {},

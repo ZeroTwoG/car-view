@@ -203,9 +203,11 @@
                             路线
                         </van-col>
                         <van-col span="8"></van-col>
-                        <van-col style="color: aqua; font-weight: normal; font-size: 18px;float: left;width: 100%;padding: 14px" span="8">
-<!--                         ==================================================================================-->
-                          <BDMap :xy="xys"></BDMap>
+                        <van-col
+                            style="color: aqua; font-weight: normal; font-size: 18px;float: left;width: 100%;padding: 14px"
+                            span="8">
+                            <!--                         ==================================================================================-->
+                            <BDMap :xy="xys"></BDMap>
                         </van-col>
                     </van-row>
                     <van-row style="margin-top: 10px;margin-left: 10px">
@@ -284,9 +286,9 @@ import axios from "axios";
 import BDMap from "@/views/map/Map.vue"
 
 export default {
-  components :{
-    BDMap:BDMap
-  },
+    components: {
+        BDMap: BDMap
+    },
     setup() {
         const onClickLeft = () => history.back();
         return {
@@ -295,8 +297,8 @@ export default {
     },
     data() {
         return {
-            xys:"",
-            xyy:"",
+            xys: "",
+            xyy: "",
             active: "search",
             isLoading: false, //刷新参数
             storeId: "",

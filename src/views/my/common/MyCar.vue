@@ -52,12 +52,10 @@ export default {
           this.flag = false;
           this.carList = res.data.data;
         }
-        console.log(this.carList);
-
       })
     },
     goStoreBindCar(carNo) {
-      axios.get("/car/api/findCarId?carNo=" + carNo).then((res => {
+      axios.get("http://172.16.7.55:7011/my/car/findCarId?carNo=" + carNo).then((res => {
         if (res.data.code === 200) {
           this.address = res.data.data;
           this.$router.push({
@@ -66,7 +64,6 @@ export default {
           })
         }
       }))
-
     },
     //（确认、取消）的弹出框
     DelDialog(carNo) {
