@@ -11,7 +11,7 @@
             <!--门店名称-->
             <van-cell class="storeName" style="font-weight: normal;font-size: 20px;color: black">{{
               item.storeName
-            }}
+              }}
             </van-cell>
             <!--门店星级-->
             <div class="interval">
@@ -78,10 +78,16 @@ export default {
   methods: {
     loadAllStore() {
       this.address.carId = this.$route.query.carId;
-      //加载所有店铺信息
-      axios.post("/mainPage/store/selectDetailStore/" + this.address.carId).then(resp => {
-        this.store = resp.data.data;
-      })
+      const userDataStr = sessionStorage.getItem("place");
+      const userData = JSON.parse(userDataStr);
+      this.userId = userData.userId
+      sessionStorage.
+        //加载所有店铺信息
+        axios.post("/mainPage/store/selectDetailStore/" + this.address.carId).then(resp => {
+          this.store = resp.data.data;
+          console.log(this.store);
+
+        })
       this.selectHeightStar();
       this.address.storeName = '';
     },
