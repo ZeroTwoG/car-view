@@ -100,7 +100,6 @@ export default {
     data() {
         //定义数据的地方
         return {
-            price: 0, //商品价格
             time: "", //剩余支付时间
             radio: "1",
             product: {},
