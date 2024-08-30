@@ -23,7 +23,7 @@
                                 <van-row>
                                     <van-col>
                                         {{ addressData.province }}{{ addressData.city }}&nbsp&nbsp{{
-                                        addressData.district }}{{ addressData.detail }}
+                                            addressData.district }}{{ addressData.detail }}
                                     </van-col>
                                 </van-row>
                                 <div style="width: 202px;position: absolute;right: 35px;font-size: 19px;top: 28px;">
@@ -232,7 +232,7 @@ export default {
             }).then(response => {
                 console.log("response:", response);
                 this.$router.push({
-                    path: "/unpaid?statusCode=11",
+                    path: "/unpaid?statusCode=1",
                     query: {
                         data: JSON.stringify(this.product),
                     },

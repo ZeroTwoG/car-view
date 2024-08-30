@@ -159,108 +159,108 @@ export default {
         },
     },
     methods: {
-        //返回上一级
+        // 返回上一级
         onClickLeft() {
-            // go(-1):返回上二级路由
+            // go(-1): 返回上二级路由
             this.$router.go(-1);
         },
-        //查询订单
+        // 查询订单
         queryByOrderId() {
-            axios.get("/my/productOrder/selectOneOrder?id=" + this.productOrderId).then((response => {
-                if (response.data.code == 200) {
-                    this.productOrder = response.data.data; //获取订单信息
+            axios.get(`/my/productOrder/selectOneOrder?id=${this.productOrderId}`).then(response => {
+                if (response.data.code === 200) {
+                    this.productOrder = response.data.data; // 获取订单信息
                     this.orderNo = response.data.data.orderNo;
                 } else {
-                    console.log("查询订单发生错误")
+                    console.log("查询订单发生错误");
                 }
-            }))
+            });
         },
-        //获取支付的二维码信息
+        // 获取支付的二维码信息
         pay() {
-            if (this.radio == 1) {
-                this.dialogVisible = true
-                axios.post("/order/api/createWeChat" + "/" + this.orderNo).then(result => {
+            if (this.radio === '1') {
+                console.log(1);
+
+                this.dialogVisible = true;
+
+                // 清除之前的定时器
+                if (this.timer1) {
+                    clearInterval(this.timer1);
+                    this.timer1 = null;
+                }
+
+                axios.post(`/my/productOrder/createWeChat/${this.orderNo}`).then(result => {
                     this.payResult.codeUrl = result.data.data.codeUrl;
                     if (result.data.code === 200 && this.dialogVisible) {
                         // 启动倒计时
                         this.startCountdown();
                         this.paymentCompleted = false;
-                        //设置一个定时任务，每隔3秒调用一次
+                        // 设置一个定时任务，每隔3秒调用一次
                         this.timer1 = setInterval(() => {
-                            this.queryPayStatus(this.orderNo)
+                            this.queryPayStatus(this.orderNo);
                         }, 3000);
                     }
+                });
+            } else if (this.radio === '2') {
+                this.dialogVisible = true;
 
-                })
-            } else if (this.radio == 2) {
-                console.log(2);
+                // 清除之前的定时器
+                if (this.timer1) {
+                    clearInterval(this.timer1);
+                    this.timer1 = null;
+                }
 
-                this.dialogVisible = true
-                this.$http.post("/order/api/createWDPay", this.productOrder).then(result => {
-                    console.log(result.data.code)
-                    if (result.data.code == 200 && this.dialogVisible) {
+                axios.post(`/my/productOrder/createWDPay`, this.productOrder).then(result => {
+                    if (result.data.code === 200 && this.dialogVisible) {
                         // 启动倒计时
                         this.startCountdown();
-                        this.payResult.codeUrl = result.data.data.data.codeUrl;
+                        this.payResult.codeUrl = result.data.data.codeUrl;
                         this.paymentCompleted = false;
-                        //设置一个定时任务，每隔3秒调用一次
+                        // 设置一个定时任务，每隔3秒调用一次
                         this.timer1 = setInterval(() => {
-                            this.queryWDPayStatus()
+                            this.queryWDPayStatus();
                         }, 3000);
-                    } else if (result.data.code == 500) {
-                        Toast.fail("店铺积分不足！请洗车或购物获取", () => {
-                            this.$router.push({
-                                path: '/unpaid?statusCode=43',
-                            })
-                        })
-
+                    } else if (result.data.code === 500) {
+                        Toast.success("店铺积分不足！请充值");
+                        this.$router.push({
+                            path: '/unpaid?statusCode=43',
+                        });
                     }
-
-                })
-
-            } else if (this.radio == 3) {
-                console.log(3);
-
+                });
+            } else if (this.radio === '3') {
                 Dialog.confirm({
                     title: "积分支付",
                     message: "确认要使用积分支付吗？",
                 }).then(() => {
-                    axios.post("/my/productOrder/IntegralPay", this.productOrder).then((response => {
-                        if (response.data.code == 200) {
-                            this.paymentCompleted = false;
-                            Toast.success("积分支付成功！")
+                    axios.post(`/my/productOrder/IntegralPay`, this.productOrder).then(response => {
+                        if (response.data.code === 200) {
+                            this.paymentCompleted = true;
+                            Toast.success("积分支付成功！");
                             this.$router.push({
                                 path: '/PayFinish',
                                 query: {
                                     data: this.productOrderId,
                                 }
-                            })
+                            });
                         } else {
-                            Toast.fail("店铺积分不足！请充值获取", () => {
+                            Toast.fail("店铺积分不足！请充值获取", 3000, () => {
                                 this.$router.push({
                                     path: '/unpaid?statusCode=43',
-                                })
-                            })
-
+                                });
+                            });
                         }
-
-                    }))
-                }).catch(() => {
-
-                })
+                    });
+                }).catch(() => { });
             }
-
-
         },
 
-
-        //微信支付根据订单号查询支付状态\\\\111
+        // 微信支付根据订单号查询支付状态
         queryPayStatus(orderNo) {
             if (orderNo !== "") {
-                if (this.radio == 1) {
-                    axios.post("/order/api/queryWeChatPayStatus/" + this.orderNo).then(result => {
+                if (this.radio === '1') {
+                    axios.post(`/my/productOrder/queryWeChatPayStatus/${this.orderNo}`).then(result => {
                         if (result.data.code === 200) {
-                            clearInterval(this.timer1)
+                            this.paymentCompleted = true;
+                            clearInterval(this.timer1);
                             this.timer1 = null;
                             Toast.success("支付成功");
                             this.dialogVisible = false;
@@ -269,77 +269,54 @@ export default {
                                 query: {
                                     data: this.productOrderId,
                                 }
-                            })
-                        } else {
-                            if (result.data.code === 500) {
-                                Toast.success("微信支付异常")
-                                clearInterval(this.timer1)
-                                this.timer1 = null;
-                                this.$router.push({
-                                    path: '/unpaid?statusCode=30',
-                                    query: {
-                                        data: this.productOrderId,
-                                    }
-                                })
-                            }
-
+                            });
                         }
-                    })
+                    });
                 }
             }
-
         },
 
-        //微信和积分支付根据订单号查询支付状态
+        // 微信和积分支付根据订单号查询支付状态
         queryWDPayStatus() {
-
-            this.$http.post("/order/api/queryWDPayStatus", this.productOrder).then(result => {
+            axios.post(`/my/productOrder/queryWDPayStatus`, this.productOrder).then(result => {
                 if (result.data.code === 200) {
-                    clearInterval(this.timer1)
+                    this.paymentCompleted = true;
+                    clearInterval(this.timer1);
                     this.timer1 = null;
-                    this.dialogVisible = false;
                     Toast.success("支付成功");
+                    this.dialogVisible = false;
                     this.$router.push({
                         path: '/PayFinish',
                         query: {
                             data: this.productOrderId,
                         }
-                    })
-                } else {
-                    if (result.data.code === 500) {
-                        Toast.success("微信和积分支付异常")
-                        clearInterval(this.timer1)
-                        this.timer1 = null;
-                        this.$router.push({
-                            path: '/unpaid?statusCode=30',
-                            query: {
-                                data: this.productOrderId,
-                            }
-                        })
-                    }
-
+                    });
                 }
-            })
+            });
         },
 
-
         startCountdown() {
+            // 清除之前的定时器
+            if (this.timer) {
+                clearInterval(this.timer);
+                this.timer = null;
+            }
+
             // 更新倒计时时间
-            const timer = setInterval(() => {
+            this.timer = setInterval(() => {
                 this.countdownTime -= 1000;
                 if (this.countdownTime <= 0) {
-                    this.paymentCompleted = true
-                    this.dialogVisible = true;
-                    this.timer1 = null;
+                    this.paymentCompleted = true;
                     this.dialogVisible = false;
+                    clearInterval(this.timer);
+                    this.timer = null;
                     Toast.success("超时取消");
-                    clearInterval(timer)
                     this.$router.push({
-                        path: '/unpaid?statusCode=30',
+                        path: '/unpaid?statusCode=1',
                         query: {
                             data: this.productOrderId,
                         }
-                    })
+                    });
                 }
             }, 1000);
         },

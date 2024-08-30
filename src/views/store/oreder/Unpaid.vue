@@ -21,7 +21,7 @@
                             </van-col>
                             <van-col span="8" style="color: #6face9; font-size: 14px">{{
                                 item.statusCode
-                                }}
+                            }}
                             </van-col>
                         </van-row>
 
@@ -118,6 +118,10 @@ export default {
             this.loadData();
         },
         loadData() {
+            console.log(this.pageNo);
+            console.log(this.pageSize);
+            console.log(this.statusCode);
+            console.log(this.userId);
             this.$axios.get(`/store/order/OrderMobile/${this.pageNo}/${this.pageSize}/${this.statusCode}/${this.userId}`).then((response => {
                 if (response.data.code == 200) {
                     var data = response.data.data.order;
