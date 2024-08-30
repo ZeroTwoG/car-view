@@ -63,6 +63,7 @@
           <van-grid-item icon="gem" text="我的积分" @click="jump('/integral')" />
           <van-grid-item icon="wap-home" text="我的车辆" @click="jump('/myCar')" />
           <van-grid-item icon="shop-collect" text="绑定门店" @click="jump('/StoreBind')" />
+          <van-grid-item icon="music" text="音乐" @click="jump('/Music')" />
           <van-grid-item icon="phone" text="加盟开店" @click="Dialog" />
         </van-grid>
       </van-cell-group>

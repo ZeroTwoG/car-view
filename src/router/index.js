@@ -129,10 +129,7 @@ const routes = [
     path: '/payment',
     component: () => import('../views/my/common/Payment.vue')
   },
-  {
-    path: '/map',
-    component: () => import('../views/map/Map.vue')
-  },
+
   {
     path: '/SingleCommodity',
     component: () => import('../views/store/SingleCommodity.vue')
@@ -235,9 +232,33 @@ const routes = [
 
 
 
+  //音乐组件
+  {
+    path: '/music',
+    component: () => import('../views/music/Music.vue')
+  },
+  {
+    path: '/kmusic',
+    component: () => import('../views/music/KMusic.vue')
+  },
+  {
+    path: '/moremsg',
+    component: () => import('../views/music/MoreMsg.vue')
+  },
+  // 地图
   {
     path: '/mapAll',
     component: () => import('../views/map/MapAll.vue')
+  },
+  // 导航
+  {
+    path: '/map',
+    component: () => import('../views/map/Map.vue')
+  },
+  // 定位
+  {
+    path: '/maps',
+    component: () => import('../views/map/Maps.vue')
   },
 
 
