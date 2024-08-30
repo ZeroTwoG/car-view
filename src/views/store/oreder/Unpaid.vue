@@ -21,7 +21,7 @@
                             </van-col>
                             <van-col span="8" style="color: #6face9; font-size: 14px">{{
                                 item.statusCode
-                            }}
+                                }}
                             </van-col>
                         </van-row>
 
@@ -41,7 +41,11 @@
                                 </p>
                             </span>
                             <van-button round type="default" style="background: #f6f6f6" size="small"
-                                @click="del(item.id)" v-if="item.statusCode !== 2 && item.statusCode !== 3">删除订单
+                                @click="del(item.id)"
+                                v-if="item.statusCode !== 1 && item.statusCode !== 2 && item.statusCode !== 3">删除订单
+                            </van-button>
+                            <van-button round type="default" style="background: #f6f6f6" size="small"
+                                @click="qx(item.id)" v-if="item.statusCode === 1">取消
                             </van-button>
                             <van-button round style="background: #019fe8; color: #ffffff" size="small"
                                 @click="fk(item)">{{ formatText(item.statusCode) }}
@@ -96,8 +100,7 @@ export default {
         this.loadData();
     },
     methods: {
-
-        //不同商品类型显示不同 mount总金额 inter总积分
+        // 不同商品类型显示不同的价格
         getDisplayPrice(item) {
             if (item.payType === 0 || (item.totalAmount != 0 && item.totalIntegral == 0)) {
                 return `${item.totalAmount}`;
@@ -107,7 +110,7 @@ export default {
                 return `${item.totalIntegral}积分+￥${item.totalAmount}`;
             }
         },
-        //点击标签时，拿到商品类型id查询到该类型的商品
+        // 点击标签时，拿到商品类型 id 查询到该类型的商品
         handleTabChange(name) {
             this.loading = true;
             this.finished = false;
@@ -118,42 +121,41 @@ export default {
             this.loadData();
         },
         loadData() {
-            console.log(this.pageNo);
-            console.log(this.pageSize);
-            console.log(this.statusCode);
-            console.log(this.userId);
-            this.$axios.get(`/store/order/OrderMobile/${this.pageNo}/${this.pageSize}/${this.statusCode}/${this.userId}`).then((response => {
+            this.$axios.get(`/store/order/OrderMobile/1/${this.pageSize}/${this.statusCode}/${this.userId}`).then((response) => {
                 if (response.data.code == 200) {
-                    var data = response.data.data.order;
-                    var store = response.data.data.store;
-                    var product = response.data.data.product;
-                    console.log(data)
+                    console.log(response.data.data);
+
+                    const data = response.data.data.order;
+                    const store = response.data.data.store;
+                    const product = response.data.data.product;
+
+                    // 清空现有数据
+                    this.orderList = [];
+
+                    // 将查询到的结果遍历到 orderList 中
                     for (let i = 0; i < data.length; i++) {
-                        //将查询到的结果遍历到orderList中
-                        data[i].storeimage = store[i].storeimage
+                        data[i].storeimage = store[i].storeimage;
                         data[i].picture = product[i].picture;
                         this.orderList.push(data[i]);
                     }
+
                     // 加载状态结束
                     this.loading = false;
+
                     // 数据全部加载完成
-                    //如果数据的个数大于
-                    if (data.length <= this.pageSize) {
+                    if (data.length < this.pageSize) {
                         this.finished = true;
                     } else {
-                        this.pageNo = this.pageNo + 1;
-                        this.finished = true;
+                        this.pageNo += 1;
                     }
                 } else {
-                    // Toast.fail("操作失败")
                     this.loading = false;
                     this.finished = true;
                 }
-
-            }))
+            });
         },
 
-        //按键格式化
+        // 按键格式化
         formatText(a) {
             if (a == 1) {
                 return "去付款";
@@ -167,33 +169,28 @@ export default {
                 return "查看订单";
             }
         },
-        //删除订单
+        // 删除订单
         del(id) {
             Dialog.confirm({
                 title: "删除",
                 message: "确认要删除吗？",
             }).then(() => {
-                //不再直接使用axois  而是用$http
-                axios.delete(`/store/order/deleteById/${id}`).then((response => {
+                axios.delete(`/store/order/deleteById/${id}`).then((response) => {
                     if (response.data.code == 200) {
-                        Toast.success("删除成功")
+                        Toast.success("删除成功");
                         this.loading = true;
                         this.finished = false;
                         this.orderList = [];
                         this.pageNo = 1;
                         this.loadData();
                     } else {
-                        Toast.fail("操作失败")
+                        Toast.fail("操作失败");
                     }
-
-                }))
-            }).catch(() => {
-
-            })
+                });
+            }).catch(() => { });
         },
-        //不同按钮的功能路径
+        // 不同按钮的功能路径
         fk(item) {
-            //判断订单的状态是否是待付款
             if (item.statusCode == 1) {
                 this.$router.push({
                     path: "/pay",
@@ -204,68 +201,75 @@ export default {
                     path: "/orderDetailed",
                     query: { data: JSON.stringify(item) },
                 });
-                //判断订单状态是否是待发货
             } else if (item.statusCode == 3) {
-                //判断订单状态是否是待收货
                 this.updateStatus(item.id);
             } else if (item.statusCode == 4) {
-                //已完成后去评价
                 this.$router.push({
                     path: "/orderComment",
                     query: { data: JSON.stringify(item) },
                 });
             } else if (item.statusCode == 6) {
-                //已评价
+                // 已评价
             } else if (item.statusCode === 5) {
-                //重新购买
                 this.selectProduct(item.id);
             }
         },
-        //重新购买按钮
+        qx(id) {
+            Dialog.confirm({
+                title: "删除",
+                message: "确认要删除吗？",
+            }).then(() => {
+                axios.put(`/store/order/updateOrder/${id}`).then((response) => {
+                    if (response.data.code == 200) {
+                        Toast.success("取消成功");
+                        this.loading = true;
+                        this.finished = false;
+                        this.orderList = [];
+                        this.pageNo = 1;
+                        this.loadData();
+                    } else {
+                        Toast.fail("操作失败");
+                    }
+                });
+            }).catch(() => { });
+
+        },        // 重新购买按钮
         selectProduct(id) {
             Dialog.confirm({
                 title: "确认购买",
                 message: "是否重新购买？",
             }).then(() => {
-                this.$http.post("/order/api/updateBuyStatus", { id }).then((response => {
+                this.$http.post("/order/api/updateBuyStatus", { id }).then((response) => {
                     if (response.data.code == 200) {
-                        Toast.success("已加入待付款")
-                        this.handleTabChange(11)
+                        Toast.success("已加入待付款");
+                        this.handleTabChange(11);
                     } else {
-                        Toast.fail("已取消")
+                        Toast.fail("已取消");
                     }
-
-                }))
-            }).catch(() => {
-
-            })
+                });
+            }).catch(() => { });
         },
-        //点击收货后 改变订单状态为已完成
+        // 点击收货后改变订单状态为已完成
         updateStatus(id) {
             Dialog.confirm({
                 title: "确认收货",
                 message: "是否确认收货？",
             }).then(() => {
-                this.$http.post("/order/api/updateStatus?id=" + id).then((response => {
+                axios.post("/my/productOrder/updateStatus?id=" + id).then((response) => {
                     if (response.data.code == 200) {
-                        Toast.success("确认收货成功")
-                        this.handleTabChange(46)
+                        Toast.success("确认收货成功");
+                        this.handleTabChange(46);
                     } else {
-                        Toast.fail("取消确认")
+                        Toast.fail("取消确认");
                     }
-
-                }))
-            }).catch(() => {
-
-            })
+                });
+            }).catch(() => { });
         },
         onClickLeft() {
-            //返回
-            this.$router.push('/my')
-
+            this.$router.push('/my');
         },
-
         onLoad() {
+            this.pageSize += 5
             // 异步更新数据
             setTimeout(() => {
                 this.loadData();

@@ -222,7 +222,7 @@ export default {
                     } else if (result.data.code === 500) {
                         Toast.success("店铺积分不足！请充值");
                         this.$router.push({
-                            path: '/unpaid?statusCode=43',
+                            path: '/unpaid?statusCode=1',
                         });
                     }
                 });
@@ -244,7 +244,7 @@ export default {
                         } else {
                             Toast.fail("店铺积分不足！请充值获取", 3000, () => {
                                 this.$router.push({
-                                    path: '/unpaid?statusCode=43',
+                                    path: '/unpaid?statusCode=1',
                                 });
                             });
                         }

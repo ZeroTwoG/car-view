@@ -149,7 +149,7 @@ export default {
             this.goMyOrder();
         },
         goMyOrder() {
-            this.$router.push("/unpaid?statusCode=41");
+            this.$router.push("/unpaid?statusCode=1");
             clearInterval(this.timer);
         },
         //查询订单
