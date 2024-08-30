@@ -22,7 +22,8 @@
                                 <div class="gap"></div>
                                 <van-row>
                                     <van-col>
-                                        {{ addressData.province }}{{ addressData.city }}&nbsp&nbsp{{ addressData.district }}{{ addressData.detail }}
+                                        {{ addressData.province }}{{ addressData.city }}&nbsp&nbsp{{
+                                        addressData.district }}{{ addressData.detail }}
                                     </van-col>
                                 </van-row>
                                 <div style="width: 202px;position: absolute;right: 35px;font-size: 19px;top: 28px;">

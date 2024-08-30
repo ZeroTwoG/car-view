@@ -84,6 +84,10 @@ const routes = [
     path: '/BindCarOfStore',
     component: () => import('../views/nearShop/storeDetail/BindCarOfStore.vue')
   },
+  {
+    path: '/detailBalance',
+    component: () => import('../views/my/common/DetailBalance.vue')
+  },
   // 商城
   {
     path: '/store',
@@ -180,6 +184,34 @@ const routes = [
   {
     path: '/washCarCourse',
     component: () => import('../views/my/amateurish/WashCarCourse.vue')
+  },
+  {
+    path: '/personInfo',
+    component: () => import('../views/my/PersonInfo.vue')
+  },
+  {
+    path: '/StoreBind',
+    component: () => import('../views/my/common/StoreBind.vue')
+  },
+  {
+    path: '/StoreDetail',
+    component: () => import('../views/my/common/StoreDetail.vue')
+  },
+  {
+    path: '/integral',
+    component: () => import('../views/my/common/Integral.vue')
+  },
+  {
+    path: '/detailIntegral',
+    component: () => import('../views/my/common/DetailIntegral.vue')
+  },
+  {
+    path: '/pay',
+    component: () => import('../views/my/common/WechatPay.vue')
+  },
+  {
+    path: '/PayFinish',
+    component: () => import('../views/my/PayFinish.vue')
   },
   //消息
   {
