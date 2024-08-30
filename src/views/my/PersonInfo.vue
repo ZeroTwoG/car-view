@@ -25,7 +25,7 @@
     </van-cell>
     <!-- 姓名 -->
     <van-cell-group>
-      <van-field v-model="info.userName" label="姓名" input-align="right" />
+      <van-field v-model="info.userName" label="姓名" input-align="right" @blur="updateUserName(info.userName)" />
     </van-cell-group>
     <!-- 生日 -->
     <van-cell is-link @click="showPopFn">
@@ -94,6 +94,8 @@ export default {
       previewImage: "", // 预览图片
       uploadResult: "", // 用于存储上传结果
       sexOptions: ["男", "女", "保密"], // 性别选项
+      nameJudeg:true, // 判断昵称是否违规
+      updateJudeg:true, // 判断是否审核中
     };
   },
   created() {
@@ -103,6 +105,24 @@ export default {
     this.init();
   },
   methods: {
+    /**
+     * ai审核用户名
+     * @param name
+     */
+    updateUserName(name){
+      this.updateJudeg=false
+      this.$axios.get(`/chat/chatAiFixationJudeg/${name}/${3}`).then(resp => {
+        console.log(resp.data.data)
+        if(resp.data.data.judge===0){
+          this.nameJudeg=true;
+          Toast("昵称审核成功");
+        }else{
+          this.nameJudeg=false;
+          Toast("昵称违规"+resp.data.data.msg);
+        }
+        this.updateJudeg=true;
+      })
+    },
     init() {
       axios.get("/my/frontUser/getUserInfo?userId=" + this.info.userId).then((res) => {
         if (res.data.code === 200) {
@@ -237,6 +257,14 @@ export default {
     },
     //更新客户信息
     updateInfo() {
+      if(!this.updateJudeg){
+        Toast("审核中..");
+        return;
+      }
+      if(!this.nameJudeg){
+        Toast("昵称违规");
+        return;
+      }
       // 文字性别转数字
       let sexForSubmit;
       switch (this.info.sex) {
