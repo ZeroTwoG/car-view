@@ -8,7 +8,7 @@
       <van-row type="flex" justify="space-between">
         <van-col span="6">头像</van-col>
         <van-col span="3">
-          <van-image round width="25px" @click="handleFileChange" height="25px" :src="info.avatar" />
+          <van-image round width="25px" @click.stop="handleFileChange" height="25px" :src="info.avatar" />
         </van-col>
       </van-row>
     </van-cell>
@@ -110,9 +110,8 @@ export default {
      * @param name
      */
     updateUserName(name) {
-      this.updateJudeg = false
+      this.updateJudeg = false;
       this.$axios.get(`/chat/chatAiFixationJudeg/${name}/${3}`).then(resp => {
-        console.log(resp.data.data)
         if (resp.data.data.judge === 0) {
           this.nameJudeg = true;
           Toast("昵称审核成功");
@@ -231,7 +230,7 @@ export default {
         Toast("请上传 jpg/png 格式图片");
         return false;
       }
-      let isLt1M = file.size / 1024 / 1024 <= 5;
+      let isLt1M = file.size / 1024 <= 5;
       if (!isLt1M) {
         Toast("图片大小5M以内");
         return false;
@@ -285,10 +284,13 @@ export default {
 
       // 更新info中的sex为转换后的数字
       this.info.sex = sexForSubmit;
-
       axios.post("/my/frontUser/updateInfo", this.info).then((res) => {
         if (res.data.code === 200) {
           Toast(res.data.msg);
+          // 更新sessionStorage中的用户数据
+          let userInfo = JSON.parse(sessionStorage.getItem("user"));
+          userInfo.avatar = this.info.avatar; // 更新avatar字段
+          sessionStorage.setItem("user", JSON.stringify(userInfo)); // 保存更新后的数据
           // 性别数字转文字
           switch (res.data.data.sex) {
             case '0':
