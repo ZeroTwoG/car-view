@@ -71,7 +71,7 @@ export default {
     },
     //查询手机号有没有被注册
     selectMobile() {
-      axios.get("http://172.16.7.55:7011/login/FrontUser/selectByPhone?phone=" + this.phoneNumber).then((res => {
+      axios.get("/login/FrontUser/selectByPhone?phone=" + this.phoneNumber).then(res => {
         if (res.data.code === 200) {
           Toast({
             message: "手机号未注册",
@@ -80,7 +80,9 @@ export default {
           //发送验证码
           this.sendCode();
         }
-      }))
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     //表单提交
     onSubmit(values) {
@@ -88,29 +90,33 @@ export default {
         this.$notify({ type: 'danger', message: "二次密码不正确" });
       }
       //验证验证码是否正确
-      axios.get("http://172.16.7.55:7011/login/FrontUser/isSms?phone=" + values.phoneNumber + "&code=" + values.sms + "&type=1").then((res => {
+      axios.get("/login/FrontUser/isSms?phone=" + values.phoneNumber + "&code=" + values.sms + "&type=1").then(res => {
         if (res.data.code === 200) {
           this.updatePass(values);
         } else {
           //验证码错误
           this.$toast(res.data.msg);
         }
-      }))
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     //更新密码
     updatePass(values) {
-      axios.put("http://172.16.7.55:7011/login/FrontUser/updatePass?phoneNumber=" + values.phoneNumber + "&password=" + values.password).then((res => {
+      axios.put("/login/FrontUser/updatePass?phoneNumber=" + values.phoneNumber + "&password=" + values.password).then(res => {
         if (res.data.code === 200) {
           this.$notify({ type: 'success', message: res.data.msg });
           this.$router.push("/login");
         } else {
           this.$notify({ type: 'danger', message: res.data.msg });
         }
-      }))
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     //发送验证码的方法
     sendCode() {
-      axios.post("http://172.16.7.55:7011/login/FrontUser/sendSms?phone=" + this.phoneNumber + "&type=1").then((res => {
+      axios.post("/login/FrontUser/sendSms?phone=" + this.phoneNumber + "&type=1").then(res => {
         if (res.data.code === 200) {
           //发送短信成功
           this.$toast(res.data.data);
@@ -118,7 +124,9 @@ export default {
           //重复发送或发送失败
           this.$toast(res.data.msg);
         }
-      }))
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     // 开始倒计时
     startCountdown() {

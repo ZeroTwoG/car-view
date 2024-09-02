@@ -153,7 +153,7 @@ export default {
         },
         //查询订单
         queryByOrderId() {
-            axios.get("/my/productOrder/PayFinish?id=" + this.productOrderId).then((response => {
+            axios.get("/my/productOrder/PayFinish?id=" + this.productOrderId).then(response => {
                 if (response.data.code == 200) {
                     if (response.data.data != null || response.data.data != '') {
                         this.productOrder = response.data.data; //获取订单信息
@@ -184,7 +184,9 @@ export default {
                 }
 
 
-            }))
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
     },
 

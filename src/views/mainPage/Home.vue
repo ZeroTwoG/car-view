@@ -20,7 +20,7 @@
           <img :src="image" style="height: 195px; width: 100%; border-radius: 7px" />
         </van-swipe-item>
       </van-swipe>
-<!--      =============================================================================-->
+      <!--      =============================================================================-->
       <BDMaps style="width: 0px;height: 0px" @goFathers="reception"></BDMaps>
       <!--获取天气-->
       <van-row class="weather">
@@ -157,12 +157,12 @@ import { Toast } from "vant";
 import BDMaps from "@/views/map/Maps.vue";
 
 export default {
-  components: {BDMaps:BDMaps},
+  components: { BDMaps: BDMaps },
   data() {
     return {
       isLoading: false, //刷新参数
-      xyx:"",
-      xyxs:"",
+      xyx: "",
+      xyxs: "",
       //选择的地址
       address: {
         storeName: '',
@@ -208,7 +208,7 @@ export default {
   },
   methods: {
     //接收子类发送的定位信息
-    reception(t){
+    reception(t) {
       console.log("父类接收子类方法:::")
       console.log(t)
       this.xyxs = t
@@ -278,7 +278,7 @@ export default {
           storeId: data.storeId,
           averageStar: data.averageStar,
           storeDistance: data.storeDistance,
-          address:this.xyxs+","+data.longitude+","+data.latitude+"",
+          address: this.xyxs + "," + data.longitude + "," + data.latitude + "",
         },
       });
     },
@@ -286,7 +286,7 @@ export default {
     loadAllStore() {
       console.log("进入方法")
       console.log(this.address.storeName)
-      axios.get("http://172.16.7.55:7011/mainPage/store/selectStore?rectangle=" + "1,2;"+this.xyxs+"" + "&storeName=" + this.address.storeName).then(resp => {
+      axios.get("/mainPage/store/selectStore?rectangle=" + "1,2;" + this.xyxs + "" + "&storeName=" + this.address.storeName).then(resp => {
         this.store = resp.data.data;
         console.log(this.store)
         this.storeLength = this.store.length;
@@ -300,7 +300,9 @@ export default {
           }
           return item;
         });
-      })
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     //距离优先
     selectDistance() {

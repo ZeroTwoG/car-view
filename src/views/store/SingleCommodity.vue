@@ -301,9 +301,8 @@ export default {
                         _this.selectReviewCount();
                         //查询评论
                         _this.selectReview();
-                    })
-                    .catch(function (error) {
-                        // console.log(error);
+                    }).catch(function (error) {
+                        console.log(error);
                     });
             }
         },
@@ -328,7 +327,9 @@ export default {
                         this.storeimage = null;
                     }
 
-                })
+                }).catch(function (error) {
+                    console.log(error);
+                });
             this.selectReview()
         },
         //查询商品评价ok
@@ -356,8 +357,9 @@ export default {
                         this.productReviews = null;
                         this.goodRatingsPercentage = 0;
                     }
-
-                })
+                }).catch(function (error) {
+                    console.log(error);
+                });
         },
         hidePhoneNumber(phone) {
             // 隐藏手机号的第二位开始的所有字符

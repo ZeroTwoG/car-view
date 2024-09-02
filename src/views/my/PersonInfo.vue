@@ -94,8 +94,8 @@ export default {
       previewImage: "", // 预览图片
       uploadResult: "", // 用于存储上传结果
       sexOptions: ["男", "女", "保密"], // 性别选项
-      nameJudeg:true, // 判断昵称是否违规
-      updateJudeg:true, // 判断是否审核中
+      nameJudeg: true, // 判断昵称是否违规
+      updateJudeg: true, // 判断是否审核中
     };
   },
   created() {
@@ -109,19 +109,21 @@ export default {
      * ai审核用户名
      * @param name
      */
-    updateUserName(name){
-      this.updateJudeg=false
+    updateUserName(name) {
+      this.updateJudeg = false
       this.$axios.get(`/chat/chatAiFixationJudeg/${name}/${3}`).then(resp => {
         console.log(resp.data.data)
-        if(resp.data.data.judge===0){
-          this.nameJudeg=true;
+        if (resp.data.data.judge === 0) {
+          this.nameJudeg = true;
           Toast("昵称审核成功");
-        }else{
-          this.nameJudeg=false;
-          Toast("昵称违规"+resp.data.data.msg);
+        } else {
+          this.nameJudeg = false;
+          Toast("昵称违规" + resp.data.data.msg);
         }
-        this.updateJudeg=true;
-      })
+        this.updateJudeg = true;
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     init() {
       axios.get("/my/frontUser/getUserInfo?userId=" + this.info.userId).then((res) => {
@@ -146,6 +148,8 @@ export default {
 
           console.log(this.info);
         }
+      }).catch(function (error) {
+        console.log(error);
       });
     },
     timeFormat(time) {
@@ -205,7 +209,7 @@ export default {
       formData.append('file', file);
 
       // 发送文件到后端
-      axios.post('http://172.16.7.55:7011/common/menu/img', formData, {
+      axios.post('/common/menu/img', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -257,11 +261,11 @@ export default {
     },
     //更新客户信息
     updateInfo() {
-      if(!this.updateJudeg){
+      if (!this.updateJudeg) {
         Toast("审核中..");
         return;
       }
-      if(!this.nameJudeg){
+      if (!this.nameJudeg) {
         Toast("昵称违规");
         return;
       }
@@ -300,6 +304,8 @@ export default {
         } else {
           Toast(res.data.msg);
         }
+      }).catch(function (error) {
+        console.log(error);
       });
     },
     //选择器

@@ -152,6 +152,8 @@ export default {
                     this.loading = false;
                     this.finished = true;
                 }
+            }).catch(function (error) {
+                console.log(error);
             });
         },
 
@@ -187,7 +189,9 @@ export default {
                         Toast.fail("操作失败");
                     }
                 });
-            }).catch(() => { });
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         // 不同按钮的功能路径
         fk(item) {
@@ -231,7 +235,9 @@ export default {
                         Toast.fail("操作失败");
                     }
                 });
-            }).catch(() => { });
+            }).catch(function (error) {
+                console.log(error);
+            });
 
         },        // 重新购买按钮
         selectProduct(id) {
@@ -263,7 +269,9 @@ export default {
                         Toast.fail("取消确认");
                     }
                 });
-            }).catch(() => { });
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         onClickLeft() {
             this.$router.push('/my');

@@ -173,6 +173,8 @@ export default {
                 } else {
                     console.log("查询订单发生错误");
                 }
+            }).catch(function (error) {
+                console.log(error);
             });
         },
         // 获取支付的二维码信息
@@ -199,6 +201,8 @@ export default {
                             this.queryPayStatus(this.orderNo);
                         }, 3000);
                     }
+                }).catch(function (error) {
+                    console.log(error);
                 });
             } else if (this.radio === '2') {
                 this.dialogVisible = true;
@@ -225,7 +229,9 @@ export default {
                             path: '/unpaid?statusCode=1',
                         });
                     }
-                });
+                }).catch(function (error) {
+                    console.log(error);
+                })
             } else if (this.radio === '3') {
                 Dialog.confirm({
                     title: "积分支付",
@@ -248,7 +254,9 @@ export default {
                                 });
                             });
                         }
-                    });
+                    }).catch(function (error) {
+                        console.log(error);
+                    });;
                 }).catch(() => { });
             }
         },
@@ -271,7 +279,9 @@ export default {
                                 }
                             });
                         }
-                    });
+                    }).catch(function (error) {
+                        console.log(error);
+                    });;
                 }
             }
         },
@@ -292,6 +302,8 @@ export default {
                         }
                     });
                 }
+            }).catch(function (error) {
+                console.log(error);
             });
         },
 

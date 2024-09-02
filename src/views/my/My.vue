@@ -5,7 +5,7 @@
       <van-row class="myMessage">
         <van-col span="4">
           <!-- 主页提示信息 -->
-          <van-icon name="bell" style="font-size: 20px" color="#fff" @click="jump('chatCount')" />
+          <van-icon name="bell" style="font-size: 20px" color="#fff" @click="jump('msgHome')" />
         </van-col>
         <van-col span="20"></van-col>
       </van-row>
@@ -132,22 +132,8 @@ export default {
     this.userName = sessionStorage.getItem("name");
     this.imageURL = this.userInfo.avatar
     this.userId = this.userInfo.userId
-    // this.init(); 弃用
   },
   methods: {
-    // init() { 弃用
-    //   axios.get("http://172.16.7.55:7011/mainPage/FrontUser/getUserInfo").then((res => {
-    //     if (res.data.code === 200) {
-    //       console.log(res.data.code);
-    //       this.userInfo = res.data.data;
-    //       this.userName = this.userInfo.userName;
-    //       this.imageURL = this.userInfo.avatar;
-    //       this.userId = this.userInfo.userId;
-    //     } else {
-    //       this.userName = "注册/登录";
-    //     }
-    //   }))
-    // },
     //刷新方法
     onRefresh() {
       setTimeout(() => {

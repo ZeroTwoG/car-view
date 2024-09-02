@@ -97,7 +97,9 @@ export default {
                 if (this.carList.length == 0) {
                     this.record = "该门店没有可洗车车辆，请添加车辆"
                 }
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
 
         //点击确定按钮，提示是否给这辆车洗车
@@ -108,7 +110,7 @@ export default {
             }).then(resp => {
                 this.form.carId = radio.carId;
                 this.form.carNo = radio.carNo;
-                axios.post("http://172.16.7.55:7011/nearShop/carWashRecord/insertCarWahRecord", this.form).then(resp => {
+                axios.post("/nearShop/carWashRecord/insertCarWahRecord", this.form).then(resp => {
                     if (resp.data.code == 200) {
                         Dialog.alert({
                             title: "提示",
@@ -121,7 +123,9 @@ export default {
                             });
                         });
                     }
-                })
+                }).catch(function (error) {
+                    console.log(error);
+                });
             }).catch(() => {
             });
         },

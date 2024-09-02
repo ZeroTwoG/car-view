@@ -88,13 +88,13 @@ export default {
     methods: {
         //通过storeId查询评分
         selectStoreEvaluate(storeId) {
-            axios.post("http://172.16.7.55:7011/nearShop/storeEvaluate/selectCommentsVoByStoreId?storeId=" + storeId).then(resp => {
+            axios.post("/nearShop/storeEvaluate/selectCommentsVoByStoreId?storeId=" + storeId).then(resp => {
                 this.evaluateDetail = resp.data.data;
                 this.detail = resp.data.data;
-                console.log(this.evaluateDetail);
-
                 this.allCom();
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         //刷新方法
         onRefresh() {

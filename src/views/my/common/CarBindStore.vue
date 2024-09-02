@@ -82,9 +82,9 @@ export default {
       //加载所有店铺信息
       axios.post("/mainPage/store/selectDetailStore/" + this.address.carId + "/" + placeDataStr).then(resp => {
         this.store = resp.data.data;
-        console.log(this.store);
-
-      })
+      }).catch(function (error) {
+        console.log(error);
+      });
       this.selectHeightStar();
       this.address.storeName = '';
     },
@@ -114,7 +114,7 @@ export default {
           storeId: date.storeId,
           averageStar: date.averageStar,
           storeDistance: date.storeDistance,
-          address: date.longitude+ ","+date.latitude,
+          address: date.longitude + "," + date.latitude,
         },
       });
     },

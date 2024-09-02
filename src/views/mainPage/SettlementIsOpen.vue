@@ -109,9 +109,11 @@ export default {
     methods: {
         //1,根据门店id查询门店名称
         selectStoreName(storeId) {
-            axios.post("http://172.16.7.55:7011/my/store/selectByStoreId?storeId=" + storeId).then(resp => {
+            axios.post("/my/store/selectByStoreId?storeId=" + storeId).then(resp => {
                 this.store = resp.data.data;
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
 
         //使用时间
@@ -215,9 +217,7 @@ export default {
         //计算的方法
         payCarMoney(form) {
             form.productId = form.id
-            console.log(form);
-
-            axios.post("http://172.16.7.55:7011/my/carWashRecord/payCarMoney", form).then(resp => {
+            axios.post("/my/carWashRecord/payCarMoney", form).then(resp => {
                 if (resp.data.code == 200) {
                     Toast("付款成功")
                     this.jump('home')
@@ -236,7 +236,9 @@ export default {
                             console.log("取消");
                         });
                 }
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         //充值洗车
         recharge() {

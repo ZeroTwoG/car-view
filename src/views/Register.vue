@@ -68,7 +68,7 @@ export default {
   methods: {
     // 查询手机号有没有被注册
     selectMobile() {
-      axios.get(`http://172.16.7.55:7011/login/FrontUser/selectByPhone?phone=${this.phoneNumber}`).then((res) => {
+      axios.get(`/login/FrontUser/selectByPhone?phone=${this.phoneNumber}`).then((res) => {
         if (res.data.code === 200) {
           // 未注册，发送验证码
           this.sendCode();
@@ -80,11 +80,13 @@ export default {
             position: 'top',
           });
         }
-      })
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     // 发送验证码的方法
     sendCode() {
-      axios.post(`http://172.16.7.55:7011/login/FrontUser/sendSms?phone=${this.phoneNumber}&type=0`).then((res) => {
+      axios.post(`/login/FrontUser/sendSms?phone=${this.phoneNumber}&type=0`).then((res) => {
         if (res.data.code === 200) {
           // 发送短信成功
           this.$toast(res.data.data);
@@ -93,7 +95,9 @@ export default {
           // 重复发送或发送失败
           this.$toast(res.data.msg);
         }
-      })
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     // 开始倒计时
     startCountdown() {
@@ -115,14 +119,16 @@ export default {
         return;
       }
       // 验证验证码是否正确
-      axios.get(`http://172.16.7.55:7011/login/FrontUser/isSms?phone=${values.phoneNumber}&code=${values.sms}&type=0`).then((res) => {
+      axios.get(`/login/FrontUser/isSms?phone=${values.phoneNumber}&code=${values.sms}&type=0`).then((res) => {
         if (res.data.code === 200) {
           this.add(values);
         } else {
           // 验证码错误
           this.$toast(res.data.msg);
         }
-      })
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     // 去登录
     goLogin() {
@@ -130,14 +136,16 @@ export default {
     },
     // 添加注册用户操作
     add(values) {
-      axios.post('http://172.16.7.55:7011/login/FrontUser/registerFrontUser?phoneNumber=' + values.phoneNumber + "&password=" + values.password).then((res) => {
+      axios.post('/login/FrontUser/registerFrontUser?phoneNumber=' + values.phoneNumber + "&password=" + values.password).then((res) => {
         if (res.data.code === 200) {
           this.$notify({ type: 'success', message: res.data.data });
           this.goLogin();
         } else {
           this.$notify({ type: 'danger', message: res.data.msg });
         }
-      })
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
   }
 }

@@ -14,16 +14,13 @@
     <van-tabbar v-model="active">
       <van-tabbar-item icon="home-o" dot @click="jump('/music')">主页</van-tabbar-item>
       <van-tabbar-item icon="play" dot @click="jump('/kmusic')">K</van-tabbar-item>
-      <van-tabbar-item icon="more-o" info="5" >动态</van-tabbar-item>
+      <van-tabbar-item icon="more-o" info="5">动态</van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
 <script>
-import axios from "axios";
-import { Toast } from "vant";
-
 export default {
-  comments:{
+  comments: {
   },
   setup() {
     const onClickLeft = () => history.back();
@@ -49,6 +46,4 @@ export default {
   }
 }
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

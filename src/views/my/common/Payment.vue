@@ -188,9 +188,11 @@ export default {
     },
     //根据门店id查询门店名称
     selectStoreName() {
-      axios.post("http://172.16.7.55:7011/mainPage/store/selectByStoreId?storeId=" + this.storeId).then(resp => {
+      axios.post("/mainPage/store/selectByStoreId?storeId=" + this.storeId).then(resp => {
         this.storeName = resp.data.data.storeName;
-      })
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     //页面跳转
     jump(uri) {
@@ -223,10 +225,12 @@ export default {
       this.show = false;
       //初始化值
       this.detailNo = uuidv4();
-      axios.post("http://172.16.7.55:7011/mainPage/pay/getRechargeNative?rechargeMoney=" + this.payMoney + "&discountsMoney=" + this.freeMoney + "&accountMoney=" + this.accountMoney + "&storeId=" + this.storeId + "&userId=" + this.userId + "&detailId=" + this.detailNo.substring(4))
-        .then((res => {
+      axios.post("/mainPage/pay/getRechargeNative?rechargeMoney=" + this.payMoney + "&discountsMoney=" + this.freeMoney + "&accountMoney=" + this.accountMoney + "&storeId=" + this.storeId + "&userId=" + this.userId + "&detailId=" + this.detailNo.substring(4))
+        .then(res => {
           this.payResult = res.data.data;
-        }));
+        }).catch(function (error) {
+          console.log(error);
+        });;
       // 定时任务，看是否成功支付
       this.timer1 = setInterval(() => {
         this.queryPayStatus(this.payResult.orderNo)
@@ -235,7 +239,7 @@ export default {
     //查询订单支付状态
     queryPayStatus(orderNo, logId) {
       if (orderNo !== "") {
-        axios.post("/mainPage/pay/queryPayStatus/" + orderNo).then((res => {
+        axios.post("/mainPage/pay/queryPayStatus/" + orderNo).then(res => {
           if (res.data.code === 200) {
             //消除定时器
             clearInterval(this.timer1);
@@ -250,7 +254,9 @@ export default {
             this.$toast.success("订单过期");
             this.dialogVisible = false;
           }
-        }))
+        }).catch(function (error) {
+          console.log(error);
+        });
       }
     }
   }

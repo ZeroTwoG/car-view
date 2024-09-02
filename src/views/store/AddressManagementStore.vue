@@ -28,7 +28,7 @@ export default {
     },
     methods: {
         initAddress() {
-            axios.get("/my/userAddress/selectAddressById/" + this.userId).then((res => {
+            axios.get("/my/userAddress/selectAddressById/" + this.userId).then(res => {
                 if (res.data.code === 200) {
                     let tempAddress = res.data.data;
                     for (let i = 0; i < tempAddress.length; i++) {
@@ -56,7 +56,7 @@ export default {
                         this.allAddress.push(a);
                     }
                 }
-            })).catch(function (error) {
+            }).catch(function (error) {
                 console.log("出错了。。。" + error);
             })
         },

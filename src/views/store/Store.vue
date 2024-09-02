@@ -159,15 +159,15 @@ export default {
                 this.productTypes = response.data.data;
                 this.queryByProduct();
                 this.handleTabChange(this.productTypes[0].commentId);
-            })
-                .catch(function (error) {
-                    // console.log(error);
-                });
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         //点击标签时，拿到商品类型id查询到该类型的商品
         handleTabChange(productTypeId) {
             this.proTypeId = productTypeId;
             this.queryByProduct();
+
         },
 
         //根据商品类型查询商品
@@ -184,8 +184,9 @@ export default {
                         this.storeimage = datas.tbStore[i].storeimage;
                     }
                 }
-
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
 
         // 跳转商品页面

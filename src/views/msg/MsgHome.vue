@@ -202,7 +202,9 @@ export default {
         } else {
           Toast("发送失败");
         }
-      });
+      }).catch(function (error) {
+        console.log(error);
+      });;
     },
     goMsg() {
       if (this.msg.trim()) { // 检查消息是否为空
@@ -224,7 +226,9 @@ export default {
           } else {
             Toast("发送失败");
           }
-        });
+        }).catch(function (error) {
+          console.log(error);
+        });;
       } else {
         Toast("消息不能为空");
       }

@@ -113,7 +113,7 @@ export default {
             formData.append('file', file);
 
             // 发送文件到后端
-            axios.post('http://172.16.7.55:7011/common/menu/img', formData)
+            axios.post('/common/menu/img', formData)
                 .then(response => {
                     console.log('上传成功:', response.data);
                     this.info.picture = response.data; // 假设后端返回的图片URL在 data.url 中

@@ -179,7 +179,9 @@ export default {
         loadAllStore(address) {
             axios.get("/mainPage/store/selectStore?rectangle=" + "1,2;" + this.xys[0] + "," + this.xys[1] + "&storeName=" + address.storeName).then(resp => {
                 this.store = resp.data.data;
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
             this.address.storeName = '';
         },
         //刷新方法

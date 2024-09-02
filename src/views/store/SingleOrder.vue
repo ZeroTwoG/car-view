@@ -238,7 +238,9 @@ export default {
                     },
                 });
             }
-            )
+            ).catch(function (error) {
+                console.log(error);
+            });
         },
 
         //提交订单时，没有写收货地址，执行该方法 给出提示
@@ -314,7 +316,7 @@ export default {
         //查询当前用户Id，传到下一个页面addressManagement中，拿到该用户的地址信息ok
         initUserId() {
             console.log(this.TherUser.userId)
-            this.$axios.get(`/store/order/getUserAndAddressByUserId/${this.TherUser.userId}`).then((res => {
+            this.$axios.get(`/store/order/getUserAndAddressByUserId/${this.TherUser.userId}`).then(res => {
                 console.log(res.data)
                 if (res.data.code === 200) {
                     this.userInfo = res.data.data.user;
@@ -326,7 +328,9 @@ export default {
                     // 初始化默认地址
                     // findIndex查找元素下标位置
                 }
-            }))
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         //返回上一级
         goSingleCommodity() {

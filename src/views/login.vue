@@ -61,8 +61,7 @@ export default {
   },
   methods: {
     login() {
-      axios.post("http://172.16.7.55:7011/sso/login?username=FIFTH" + this.username + "&password=" + this.password).then((res => {
-        console.log(res.data);
+      axios.post("/sso/login?username=FIFTH" + this.username + "&password=" + this.password).then(res => {
         if (res.data.code === 200) {
           sessionStorage.setItem("token", res.data.data.token);
           sessionStorage.setItem("user", JSON.stringify(res.data.data.user));
@@ -79,7 +78,9 @@ export default {
             type: 'error'
           });
         }
-      }));
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     //跳转页面的方法
     jump(uri) {

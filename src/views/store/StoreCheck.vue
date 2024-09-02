@@ -325,7 +325,9 @@ export default {
                         console.log("商品列表")
                         console.log(this.products)
                         //执行查询门店星级
-                    })
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
             }
         },
         //拿到店铺的星级
@@ -341,7 +343,9 @@ export default {
                 .then(resp => {
                     console.log("商店:::" + resp.data)
                     this.selectPeopleAndRating = resp.data.data;
-                })
+                }).catch(function (error) {
+                    console.log(error);
+                });
         },
         //加盟开店
         Dialog() {

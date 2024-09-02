@@ -111,7 +111,7 @@ export default {
   methods: {
     init() {
       this.userId = this.$route.query.userId;
-      axios.get("/my/userIntegral/selectCreditsDetail?userId=" + this.userId).then((res => {
+      axios.get("/my/userIntegral/selectCreditsDetail?userId=" + this.userId).then(res => {
         if (res.data.code === 200) {
           this.integralLog = res.data.data.all;
           this.incomeInfo = res.data.data.in;
@@ -147,7 +147,9 @@ export default {
             this.flag2 = true;
           }
         }
-      }))
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     //刷新方法
     onRefresh() {

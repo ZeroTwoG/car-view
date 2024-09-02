@@ -122,7 +122,9 @@ export default {
             let xyxs = sessionStorage.getItem("place");
             axios.post("/my/store/selectDetailStore?rectangle=" + xyxs + "" + "&storeId=" + address.storeId).then(resp => {
                 this.store = resp.data.data;
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         //点击店铺跳转
         goStoreInfo(date) {

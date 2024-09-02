@@ -355,11 +355,13 @@ export default {
         },
         //查看是否绑定门店
         checkedBind() {
-            axios.post("http://172.16.7.55:7011/nearShop/frontUserStore/selectFrontUser?storeId=" + this.storeId + "&userId=" + this.userId).then(resp => {
+            axios.post("/nearShop/frontUserStore/selectFrontUser?storeId=" + this.storeId + "&userId=" + this.userId).then(resp => {
                 if (resp.data.code === 200) {
                     this.bindStore = true;
                 }
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         //绑定车辆
         bingCar(storeId) {
@@ -375,7 +377,7 @@ export default {
         selectUserNumber() {
             let _this = this;
             //使用axios向后台发请求
-            axios.get("http://172.16.7.55:7011/nearShop/carWashRecord/selectRecord?storeId=" + this.storeId)
+            axios.get("/nearShop/carWashRecord/selectRecord?storeId=" + this.storeId)
                 .then(function (response) {
                     if (response.data.data.length == 0) {
                         _this.washMsg = "暂无洗车数据"
@@ -474,7 +476,9 @@ export default {
         selectStore(storeId) {
             axios.post("/nearShop/store/selectByStoreId?storeId=" + storeId).then(resp => {
                 this.store = resp.data.data;
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         //通过storeId查询评分
         selectStoreEvaluate(storeId) {
@@ -484,13 +488,17 @@ export default {
                 } else {
                     // this.$toast("暂无评分");
                 }
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         //通过storeId查询工位
         selectStoreStation(storeId) {
-            axios.post("http://172.16.7.55:7011/nearShop/station/selectByStoreId?storeId=" + storeId).then(resp => {
+            axios.post("/nearShop/station/selectByStoreId?storeId=" + storeId).then(resp => {
                 this.storeStation = resp.data.data;
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         //详细评论跳转
         evaluateDetail(storeId) {
@@ -518,11 +526,13 @@ export default {
         },
         //绑定门店信息
         bingStoreMsg() {
-            axios.post("http://172.16.7.55:7011/nearShop/frontUserStore/insertFrontUser?userId=" + this.userId + "&storeId=" + this.storeId).then(resp => {
+            axios.post("/nearShop/frontUserStore/insertFrontUser?userId=" + this.userId + "&storeId=" + this.storeId).then(resp => {
                 if (resp.data.code == 200) {
                     this.bindStore = true;
                 }
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         //跳转商店
         shop(storeId, storeName, storeimage) {

@@ -47,15 +47,17 @@ export default {
   methods: {
     initCar() {
       const userDataStr = sessionStorage.getItem("user");
-      axios.get("http://172.16.7.55:7011/my/car/carBind/" + (JSON.parse(userDataStr)).userId).then(res => {
+      axios.get("/my/car/carBind/" + (JSON.parse(userDataStr)).userId).then(res => {
         if (res.data.code === 200) {
           this.flag = false;
           this.carList = res.data.data;
         }
-      })
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     goStoreBindCar(carNo) {
-      axios.get("http://172.16.7.55:7011/my/car/findCarId?carNo=" + carNo).then((res => {
+      axios.get("/my/car/findCarId?carNo=" + carNo).then(res => {
         if (res.data.code === 200) {
           this.address = res.data.data;
           this.$router.push({
@@ -63,7 +65,9 @@ export default {
             query: { carId: res.data.data.carId },
           })
         }
-      }))
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     //（确认、取消）的弹出框
     DelDialog(carNo) {
@@ -82,14 +86,16 @@ export default {
     },
     //删除绑定的车辆
     dropBindCar(carNo) {
-      axios.delete("/my/car/deleteCarNo/" + carNo).then((res => {
+      axios.delete("/my/car/deleteCarNo/" + carNo).then(res => {
         if (res.data.code === 200) {
           this.$notify({ type: 'success', message: res.data.msg });
           this.initCar();
         } else {
           this.$notify({ type: 'danger', message: res.data.msg });
         }
-      }))
+      }).catch(function (error) {
+        console.log(error);
+      });
     }
   }
 }

@@ -87,13 +87,15 @@ export default {
         },
         //查询用户是否有优惠卷
         selectHaveTicket(form) {
-            axios.post("http://172.16.7.55:7011/my/washCarCoupon/selectCouponByUserId/" + form.userId + "/" + form.storeId).then(resp => {
+            axios.post("/my/washCarCoupon/selectCouponByUserId/" + form.userId + "/" + form.storeId).then(resp => {
                 if (resp.data.code === 500) {
                     this.flag = true;
                 } else {
                     this.wanshCarTicket = resp.data.data
                 }
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
 
         //确定选择的优惠卷

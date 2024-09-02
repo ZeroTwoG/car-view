@@ -69,11 +69,13 @@ export default {
   methods: {
     //积分总额
     selectTotalIntegral() {
-      axios.post("/my/userIntegral/selectIntegralByUserId/" + this.userId).then((res => {
+      axios.post("/my/userIntegral/selectIntegralByUserId/" + this.userId).then(res => {
         if (res.data.code === 200) {
           this.credits = res.data.data;
         }
-      }))
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     //页面刷新
     onRefresh() {

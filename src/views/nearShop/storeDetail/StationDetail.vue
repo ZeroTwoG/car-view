@@ -88,9 +88,11 @@ export default {
         },
         //通过storeId查询工位
         selectStoreStation(storeId) {
-            axios.post("http://172.16.7.55:7011/nearShop/station/selectByStoreId?storeId=" + storeId).then(resp => {
+            axios.post("/nearShop/station/selectByStoreId?storeId=" + storeId).then(resp => {
                 this.storeStation = resp.data.data;
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         //洗车
         washCar(stationId) {
@@ -122,7 +124,6 @@ export default {
         },
         storeBindMsg() {
             axios.post("/nearShop/userBalance/selectStoreBind?userId=" + this.userId + "&storeId=" + this.storeId).then(resp => {
-                console.log(resp.data);
                 if (resp.data.code === 200) {
                     this.storeBindDetail = resp.data.data;
                     this.storeBindDetail = this.storeBindDetail.filter(item => {
@@ -137,9 +138,9 @@ export default {
                         message: "余额不足十元，请充值后再试",
                     });
                 }
-
-
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
     }
 }

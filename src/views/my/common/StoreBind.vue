@@ -74,7 +74,9 @@ export default {
                         item.credits = 0
                     }
                 })
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         //查看门店
         checkedStore(amount, credits, storeId) {

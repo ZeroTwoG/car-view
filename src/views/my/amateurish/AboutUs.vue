@@ -50,7 +50,9 @@ export default {
     selectAboutUs() {
       axios.post("/my/about/selectFirst").then(resp => {
         this.aboutUsData = resp.data.data;
-      })
+      }).catch(function (error) {
+        console.log(error);
+      });
     }
 
   }

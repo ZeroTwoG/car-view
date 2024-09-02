@@ -30,7 +30,7 @@ export default {
       //地址id存在，执行更新操作
       this.title = "更新地址";
       //发送请求获取地址内容
-      axios.get("/my/userAddress/selectOneAddress/" + id).then((res => {
+      axios.get("/my/userAddress/selectOneAddress/" + id).then(res => {
         if (res.data.code === 200) {
           let myAddr = res.data.data;
           //判断是否为默认地址
@@ -49,20 +49,24 @@ export default {
           //根据地区的查询地区code
           this.searchFor();
         }
-      }))
+      }).catch(function (error) {
+        console.log(error);
+      });
     }
   },
   methods: {
     //查询地区编号code
     searchFor() {
       axios.get("/my/area/selectAreaCode?country=" + this.AddressInfo.country + "&city=" + this.AddressInfo.city
-        + "&province=" + this.AddressInfo.province).then((res => {
+        + "&province=" + this.AddressInfo.province).then(res => {
           if (res.data.code === 200) {
             this.AddressInfo.areaCode = res.data.data.code + "";
           } else {
             this.$notify({ type: 'danger', message: '获取地址失败' });
           }
-        }))
+        }).catch(function (error) {
+          console.log(error);
+        });
     },
     //跳转
     jump() {
@@ -86,14 +90,16 @@ export default {
           flag: flag, //是否是默认地址
         };
         //添加地址
-        axios.post("/my/userAddress/addAddress", this.form).then((res => {
+        axios.post("/my/userAddress/addAddress", this.form).then(res => {
           if (res.data.code === 200) {
             this.$toast(res.data.msg);
             this.jump();
           } else {
             this.$notify({ type: 'danger', message: res.data.msg });
           }
-        }))
+        }).catch(function (error) {
+          console.log(error);
+        });
       } else {
         //更新地址
         this.form = {
@@ -108,27 +114,31 @@ export default {
           flag: flag, //是否是默认地址
         };
         //更新地址
-        axios.post("/my/userAddress/updateUserAddress", this.form).then((res => {
+        axios.post("/my/userAddress/updateUserAddress", this.form).then(res => {
           if (res.data.code === 200) {
             this.$toast(res.data.msg);
             this.jump();
           } else {
             this.$notify({ type: 'danger', message: res.data.msg });
           }
-        }))
+        }).catch(function (error) {
+          console.log(error);
+        });
       }
     },
     //删除地址
     onDelete() {
       let id = this.$route.query.id;
-      axios.delete("/my/userAddress/deleteUserAddress?addressId=" + id).then((res => {
+      axios.delete("/my/userAddress/deleteUserAddress?addressId=" + id).then(res => {
         if (res.data.code === 200) {
           this.$toast.success(res.data.msg);
           this.jump();
         } else {
           this.$toast.fail(res.data.msg);
         }
-      }))
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
   }
 }

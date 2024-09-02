@@ -84,13 +84,15 @@ export default {
 
         //根据token,和门店id查询当前登录用户的添加的车辆
         selectByToken() {
-            axios.get("http://172.16.7.55:7011/nearShop/carWashRecord/selectByUserId?userId=" + this.form.userId).then(resp => {
+            axios.get("/nearShop/carWashRecord/selectByUserId?userId=" + this.form.userId).then(resp => {
                 if (resp.data.code == 200) {
                     this.carList = resp.data.data;
                 } else {
                     this.record = "暂无车辆在清洗";
                 }
-            })
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
 
         //点击确定按钮，提示是否给这辆车洗车

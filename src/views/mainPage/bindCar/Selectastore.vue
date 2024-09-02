@@ -79,7 +79,7 @@ export default {
         },
         //查询门店信息
         selectAllStore() {
-            axios.post("http://172.16.7.55:7011/mainPage/store/searchStore?storeName=" + this.selectMsg.storeName).then(resp => {
+            axios.post("/mainPage/store/searchStore?storeName=" + this.selectMsg.storeName).then(resp => {
                 this.storeInfo = resp.data.data;
             })
                 .catch(function (error) {

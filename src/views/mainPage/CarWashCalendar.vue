@@ -16,7 +16,7 @@
           <!-- 用户手机号 -->
           <van-col span="16" style="text-align: left">{{
             info.userName
-          }}
+            }}
           </van-col>
         </van-row>
       </van-col>
@@ -120,7 +120,7 @@ export default {
   methods: {
     //1,根据token查询当前登录用户信息
     initInfo() {
-      axios.get("/mainPage/FrontUser/getUserInfo?userId=" + this.info.userId).then((res => {
+      axios.get("/mainPage/FrontUser/getUserInfo?userId=" + this.info.userId).then(res => {
         if (res.data.code === 200) {
           this.info.userName = res.data.data.userName;
           this.info.avatar = res.data.data.avatar;
@@ -132,7 +132,9 @@ export default {
           this.selectWashNumber();
           this.handleClick(new Date());
         }
-      }))
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
 
     //2,查询用户注册天数
@@ -145,14 +147,16 @@ export default {
 
     //3，查询绑定的门店数
     selectStoreNumber() {
-      axios.post("http://172.16.7.55:7011/nearShop/frontUserStore/selectStoreBind?userId=" + this.info.userId).then(resp => {
+      axios.post("/nearShop/frontUserStore/selectStoreBind?userId=" + this.info.userId).then(resp => {
         this.info.storeNumber = resp.data.data.length;
-      })
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
 
     //4，查询服务次数
     selectWashNumber() {
-      axios.get("http://172.16.7.55:7011/nearShop/carWashRecord/selectNumByUserId?userId=" + this.info.userId)
+      axios.get("/nearShop/carWashRecord/selectNumByUserId?userId=" + this.info.userId)
         .then(response => {
           if (response.data.code == 200) {
             this.info.washNumber = response.data.data
@@ -192,7 +196,7 @@ export default {
       let tmp = moment(values).format("YYYY-MM-DD");
       //2,请求后端方法
       console.log(this.info);
-      
+
       axios.post("/nearShop/carWashRecord/selectRecordByUserId?userId=" +
         this.info.userId +
         "&createDate=" +

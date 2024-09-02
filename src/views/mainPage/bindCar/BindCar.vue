@@ -204,9 +204,11 @@ export default {
     methods: {
         //获取用户信息
         selectUser() {
-            axios.get("http://172.16.7.55:7011/mainPage/FrontUser/getUserInfo?userId=" + this.initUserId).then(resp => {
+            axios.get("/mainPage/FrontUser/getUserInfo?userId=" + this.initUserId).then(resp => {
                 this.info = resp.data.data;
-            })
+            }).catch(function (error) {
+                // console.log(error);
+            });
         },
         //刷新方法
         onRefresh() {
@@ -218,9 +220,10 @@ export default {
         },
         //根据门店id查询门店名称
         selectStoreName() {
-            axios.post("http://172.16.7.55:7011/mainPage/store/selectByStoreId?storeId=" + this.storeId).then(resp => {
+            axios.post("/mainPage/store/selectByStoreId?storeId=" + this.storeId).then(resp => {
                 this.storeName = resp.data.data.storeName;
-            })
+            }).catch(function (error) {
+            });
         },
 
         //跳转选择门店页面
@@ -237,7 +240,7 @@ export default {
             } else if (this.carNo.length < 7) {
                 this.$toast("请填写正确的车牌号");
             } else {
-                axios.post("http://172.16.7.55:7011/mainPage/car/bingCar?userId=" + this.info.userId + "&carNo=" + this.carNo + "&storeId=" + this.storeId + "&createBy" + this.createBy)
+                axios.post("/mainPage/car/bingCar?userId=" + this.info.userId + "&carNo=" + this.carNo + "&storeId=" + this.storeId + "&createBy" + this.createBy)
                     .then(response => {
                         if (response.data.code == 200) {
                             this.$toast("添加成功");
@@ -249,7 +252,6 @@ export default {
                         }
                     })
                     .catch(function (error) {
-                        console.log(error);
                     });
             }
         },
