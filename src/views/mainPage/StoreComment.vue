@@ -12,7 +12,7 @@
             </template>
         </van-field>
 
-        <van-field v-model="message" rows="3" autosize label="" type="textarea" placeholder="请输入您对门店的评价" />
+        <van-field v-model="message" rows="3" autosize label="" type="textarea" placeholder="请输入您对门店的评价" @blur="judgeMsg(message)"/>
 
         <div style="float: left; margin-left: 10px">
             <img :src="previewImage" v-if="previewImage" width="80px" height="80px" />
@@ -37,6 +37,7 @@ import axios from "axios";
 export default {
     data() {
         return {
+            judgeMsgs:false,
             rate: 5, //店铺星级
             checkbox: true, //是否匿名,默认匿名
             storeName: "",
@@ -62,6 +63,27 @@ export default {
         this.info.storeId = this.$route.query.storeId;
     },
     methods: {
+        // 判断评价信息是否符合
+        judgeMsg(msg){
+          if(msg!=null&&msg!=''){
+            this.$axios.get(`/chat/chatAiFixationJudeg/${msg}/${2}`).then (resp => {
+              console.log(resp.data)
+              let data = resp.data.data;
+              if(data.judge===0) {
+                this.judgeMsgs=true;
+                this.$notify({
+                  title: '通过审核',
+                  message: data.msg,
+                  type: 'success'
+                });
+              }else {
+                this.judgeMsgs=false;
+                this.$toast("请修改评价内容");
+                return;
+              }
+            })
+          }
+        },
         //1,返回上一级
         onClickLeft(uri) {
             this.$router.push(
@@ -73,6 +95,7 @@ export default {
 
         //添加评价
         commitReview() {
+
             var _this = this;
             this.info.star = this.rate;
             this.info.content = this.message;
@@ -80,6 +103,14 @@ export default {
                 _this.$toast("请输入评价内容");
                 return;
             }
+          if(!this.judgeMsgs){
+            this.$notify({
+              title: '警告',
+              message: '请修改评价内容,不得出现违规字词',
+              type: 'warning'
+            });
+            return;
+          }
             if (this.checkbox) {
                 this.info.userId = 0;
             } else {

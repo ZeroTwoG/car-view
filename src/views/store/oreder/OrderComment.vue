@@ -19,7 +19,15 @@
             </template>
         </van-field>
 
-        <van-field v-model="message" rows="3" autosize label="" type="textarea" placeholder="请输入您对商品的评价" />
+        <van-field
+                @blur="judgeMsg(message)"
+                v-model="message"
+                rows="3"
+                autosize
+                label=""
+                type="textarea"
+                placeholder="请输入您对商品的评价"
+        />
 
         <van-field name="checkbox">
             <template #input>
@@ -36,24 +44,25 @@
 import { Toast } from 'vant';
 export default {
 
-    name: "Comment",
-    data() {
-        return {
-            rate: 5,
-            fileList: [],
-            checkbox: false,
-            message: "",
-            productOrder: {}, //订单对象
-            userId: "", //当前用户id
-            statusCode: "", //支付状态码
-        };
-    },
-    created() {
-        const dataParam = JSON.parse(this.$route.query.data);
-        if (dataParam) {
-            this.productOrder = dataParam;
-            console.log(this.productOrder)
-        }
+        name: "Comment",
+        data() {
+            return {
+              judgeMsgs:false,
+                rate: 5,
+                fileList: [],
+                checkbox: false,
+                message:"",
+                productOrder: {}, //订单对象
+                userId: "", //当前用户id
+                statusCode: "", //支付状态码
+            };
+        },
+        created() {
+            const dataParam = JSON.parse(this.$route.query.data);
+            if (dataParam) {
+                this.productOrder = dataParam;
+                console.log(this.productOrder)
+            }
 
     },
 
@@ -62,32 +71,59 @@ export default {
             //返回
             this.$router.push('/unpaid?statusCode=43')
 
-        },
-
-        //添加评价
-        commitReview() {
-
-            this.$axios.post("/store/order/insertComment", {
-                productId: this.productOrder.productId,
-                userId: this.checkbox ? 0 : this.productOrder.userId,
-                content: this.message,
-                rating: this.rate,
-                orderId: this.productOrder.id
-            })
-                .then((response) => {
-                    console.log(response.data)
-                    if (response.data.code == 200) {
-                        this.onClickLeft();
-                    } else {
-                        Toast.fail(response.data.msg);
-                        this.onClickLeft();
-                    }
-                }).catch(function (error) {
-                    console.log(error);
+            },
+          // 判断评价信息是否符合
+          judgeMsg(msg){
+            if(msg!=null&&msg!=''){
+              this.$axios.get(`/chat/chatAiFixationJudeg/${msg}/${2}`).then (resp => {
+                console.log(resp.data)
+                let data = resp.data.data;
+                if(data.judge===0) {
+                  this.judgeMsgs=true;
+                  this.$notify({
+                    title: '通过审核',
+                    message: data.msg,
+                    type: 'success'
+                  });
+                }else {
+                  this.judgeMsgs=false;
+                  this.$toast("请修改评价内容");
+                  return;
+                }
+              })
+            }
+          },
+            //添加评价
+            commitReview() {
+            if(!this.judgeMsgs){
+              this.$notify({
+                title: '警告',
+                message: '请修改评价内容,不得出现违规字词',
+                type: 'warning'
+              });
+              return;
+            }
+                this.$axios.post("/store/order/insertComment", {
+                        productId: this.productOrder.productId,
+                        userId: this.checkbox?0:this.productOrder.userId,
+                        content: this.message,
+                        rating: this.rate,
+                        orderId: this.productOrder.id
+                    })
+                    .then((response)=>{
+                      console.log(response.data)
+                        if (response.data.code==200){
+                          this.onClickLeft();
+                        }else {
+                          Toast.fail(response.data.msg);
+                          this.onClickLeft();
+                        }
+                    }).catch(function (error) {
+                  console.log(error);
                 });
+            },
         },
-    },
-}
+    }
 </script>
 
 <style scoped>
