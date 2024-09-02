@@ -29,6 +29,7 @@
         </van-field>
 
         <van-field
+                @blur="judgeMsg(message)"
                 v-model="message"
                 rows="3"
                 autosize
@@ -57,6 +58,7 @@
         name: "Comment",
         data() {
             return {
+              judgeMsgs:false,
                 rate: 5,
                 fileList: [],
                 checkbox: false,
@@ -81,10 +83,37 @@
                 this.$router.push('/unpaid?statusCode=43')
 
             },
-
+          // 判断评价信息是否符合
+          judgeMsg(msg){
+            if(msg!=null&&msg!=''){
+              this.$axios.get(`/chat/chatAiFixationJudeg/${msg}/${2}`).then (resp => {
+                console.log(resp.data)
+                let data = resp.data.data;
+                if(data.judge===0) {
+                  this.judgeMsgs=true;
+                  this.$notify({
+                    title: '通过审核',
+                    message: data.msg,
+                    type: 'success'
+                  });
+                }else {
+                  this.judgeMsgs=false;
+                  this.$toast("请修改评价内容");
+                  return;
+                }
+              })
+            }
+          },
             //添加评价
             commitReview() {
-
+            if(!this.judgeMsgs){
+              this.$notify({
+                title: '警告',
+                message: '请修改评价内容,不得出现违规字词',
+                type: 'warning'
+              });
+              return;
+            }
                 this.$axios.post("/store/order/insertComment", {
                         productId: this.productOrder.productId,
                         userId: this.checkbox?0:this.productOrder.userId,

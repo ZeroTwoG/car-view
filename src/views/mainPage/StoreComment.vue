@@ -97,11 +97,13 @@ export default {
         commitReview() {
 
             var _this = this;
-          if (this.message == "" || this.rate == "") {
-            _this.$toast("请输入评价内容");
-            return;
-          }
-          if(this.judgeMsgs){
+            this.info.star = this.rate;
+            this.info.content = this.message;
+            if (this.info.content == "" && this.info.picture == "") {
+                _this.$toast("请输入评价内容");
+                return;
+            }
+          if(!this.judgeMsgs){
             this.$notify({
               title: '警告',
               message: '请修改评价内容,不得出现违规字词',
@@ -109,8 +111,6 @@ export default {
             });
             return;
           }
-          this.info.star = this.rate;
-          this.info.content = this.message;
             if (this.checkbox) {
                 this.info.userId = 0;
             } else {
