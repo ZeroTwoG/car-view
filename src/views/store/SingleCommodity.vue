@@ -8,14 +8,14 @@
             <van-nav-bar title="商品详情" left-text="返回" left-arrow @click-left="goStore"></van-nav-bar>
             <!-- 标题 -->
         </van-sticky>
-<!--         轮播图：商品图片-->
-                <van-swipe :autoplay="3000">
-                    <!-- 循环拿到的该商品的图片 -->
-                    <van-swipe-item v-for="(image, index) in productImages" :key="index">
-                      <img :src="image" style="height: 300px; width: 100%; border-radius: 7px">
-                    </van-swipe-item>
-                </van-swipe>
-<!--        <img :src="productImages" style="width: 100%; height: 300px; border-radius: 7px"/>-->
+        <!--         轮播图：商品图片-->
+        <van-swipe :autoplay="3000">
+            <!-- 循环拿到的该商品的图片 -->
+            <van-swipe-item v-for="(image, index) in productImages" :key="index">
+                <img :src="image" style="height: 300px; width: 100%; border-radius: 7px">
+            </van-swipe-item>
+        </van-swipe>
+        <!--        <img :src="productImages" style="width: 100%; height: 300px; border-radius: 7px"/>-->
         <div style="width: 100%; height: 45px; background-color: #66c6f2">
             <span style="
               font-size: 26px;
@@ -134,7 +134,7 @@
                     <van-image round width="10rem" height="10rem" :src="productReview.user.avatar"
                         style="width: 40px; height: 40px; float: left" />
                     <div style="margin-left: 55px">
-                        <div style="text-align: left; color: gray">{{ hidePhoneNumber(productReview.text.content) }}
+                        <div style="text-align: left; color: gray;color: black;">热心市民xxx
                         </div>
                         <van-rate v-model="productReview.text.rating" :size="20" color="#ffd21e" void-icon="star"
                             void-color="#eee" readonly />
@@ -340,9 +340,10 @@ export default {
             }
             this.$axios.get(`/store/product/selectTbProduckreviewByProductId/${this.product.productId}`)
                 .then(resp => {
-                    console.log("查询商品评价")
                     if (resp.data.code == 200) {
+                        console.log(resp.data.data);
                         var dataNum = resp.data.data
+
                         this.productReviews = dataNum.slice(0, 3);//截取查询结果的前三条
                         this.total = dataNum.length;
                         var num = 0;

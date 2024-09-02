@@ -5,29 +5,20 @@
       <!-- 粘性布局 -->
       <van-sticky>
         <!-- 导航栏 -->
-        <van-nav-bar
-            title="关于我们"
-            left-arrow
-            @click-left="onClickLeft"
-        />
+        <van-nav-bar title="关于我们" left-arrow @click-left="onClickLeft" />
         <!-- 标题 -->
       </van-sticky>
-      <van-image
-          style="font-size: 16px;margin-top: 30px;margin-left: 22%"
-          width="200"
-          height="100"
-          :src="require('@/assets/img/carLogo/洗车标识.png')"
-      />
-      <van-row
-          style="font-size: 16px;margin-top: 30px;margin-left: 38%"
-      >当前版本{{ aboutUsData.editionNo }}
+      <van-image style="font-size: 16px;margin-top: 30px;margin-left: 22%" width="200" height="100"
+        :src="require('@/assets/img/carLogo/洗车标识.png')" />
+      <van-row style="font-size: 16px;margin-top: 30px;margin-left: 38%">当前版本{{ aboutUsData.editionNo }}
       </van-row>
       <div v-html="aboutUsData.about"></div>
     </van-pull-refresh>
   </div>
 </template>
 <script>
-import {Toast} from "vant";
+import axios from "axios";
+import { Toast } from "vant";
 
 export default {
   setup() {
@@ -57,8 +48,7 @@ export default {
     },
     //获取关于我们最新数据
     selectAboutUs() {
-      this.$http.post("/aboutus/api/selectFirst").then(resp => {
-        // console.log(resp.data.data);
+      axios.post("/my/about/selectFirst").then(resp => {
         this.aboutUsData = resp.data.data;
       })
     }

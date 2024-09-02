@@ -210,6 +210,10 @@ const routes = [
     path: '/PayFinish',
     component: () => import('../views/my/PayFinish.vue')
   },
+  {
+    path: '/feedback',
+    component: () => import('../views/my/Feedback.vue')
+  },
   //消息
   {
     path: '/msgHome',
@@ -227,8 +231,6 @@ const routes = [
     path: '/TextMsg',
     component: () => import('../views/msg/TextMsg.vue')
   },
-
-
 
 
 
