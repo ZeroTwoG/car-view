@@ -235,7 +235,7 @@ export default {
     //查询订单支付状态
     queryPayStatus(orderNo, logId) {
       if (orderNo !== "") {
-        axios.post("http://172.16.7.55:7011/mainPage/pay/queryPayStatus/" + orderNo).then((res => {
+        axios.post("/mainPage/pay/queryPayStatus/" + orderNo).then((res => {
           if (res.data.code === 200) {
             //消除定时器
             clearInterval(this.timer1);

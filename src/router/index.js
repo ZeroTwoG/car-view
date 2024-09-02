@@ -234,8 +234,6 @@ const routes = [
 
 
 
-
-
   //音乐组件
   {
     path: '/music',

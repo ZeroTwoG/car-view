@@ -5,7 +5,7 @@
       <van-row class="myMessage">
         <van-col span="4">
           <!-- 主页提示信息 -->
-          <van-icon name="bell" style="font-size: 20px" color="#fff" @click="jump('')" />
+          <van-icon name="bell" style="font-size: 20px" color="#fff" @click="jump('chatCount')" />
         </van-col>
         <van-col span="20"></van-col>
       </van-row>
@@ -128,10 +128,10 @@ export default {
     }
   },
   created() {
-    this.userInfo=JSON.parse(sessionStorage.getItem("user"));
+    this.userInfo = JSON.parse(sessionStorage.getItem("user"));
     this.userName = sessionStorage.getItem("name");
-    this.imageURL=this.userInfo.avatar
-    this.userId=this.userInfo.userId
+    this.imageURL = this.userInfo.avatar
+    this.userId = this.userInfo.userId
     // this.init(); 弃用
   },
   methods: {
