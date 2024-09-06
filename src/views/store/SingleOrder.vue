@@ -113,7 +113,7 @@
 
             <!-- 运费弹框 -->
             <van-action-sheet v-model="show" title="运费说明">
-                <div class="content">免运费,部分地区不包邮</div>
+                <div class="content">实际情况根据商家自己决定</div>
             </van-action-sheet>
 
             <!-- 留言 -->
@@ -138,7 +138,6 @@
                         @click="goPay">提交订单</span></van-tabbar-item>
             </van-tabbar>
         </div>
-             
         <!--   订单获取地址页面AddressManagementStore.vue中的所有地址信息，     -->
         <van-popup v-model="addressShow" round position="bottom" :style="{ height: '40%' }" class="popup-container">
             <div class="card-container">

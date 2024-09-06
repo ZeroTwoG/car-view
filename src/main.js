@@ -48,10 +48,6 @@ window._AMapSecurityConfig = {
   securityJsCode: '5eff5dfe18a510317ace06da8652ca38',
 }
 
-//底部四个按钮固定位置
-// import Foot from './components/Foot.vue'
-// Vue.component('Foot', Foot)
-
 //请求拦截器---设置携带token令牌--请求拦截器
 axios.interceptors.request.use(config => {
   var token = sessionStorage.getItem("token");
@@ -63,7 +59,7 @@ axios.interceptors.request.use(config => {
 //前置路由守卫 to: 即将要访问的路径 from: 从哪里来 next: 放行函数 前置路由守卫
 router.beforeEach((to, from, next) => {
   //如果用户访问的是登录页面，直接放行
-  if (to.path === "/login") {
+  if (to.path === "/login" || to.path === "/register" || to.path === "/pass" || to.path === "/threeLogin") {
     //放行
     return next();
   }

@@ -98,6 +98,7 @@ export default {
         var user = JSON.parse(item);
         this.userId = user.userId
         this.loadData();
+
     },
     methods: {
         // 不同商品类型显示不同的价格
@@ -123,8 +124,6 @@ export default {
         loadData() {
             this.$axios.get(`/store/order/OrderMobile/1/${this.pageSize}/${this.statusCode}/${this.userId}`).then((response) => {
                 if (response.data.code == 200) {
-                    console.log(response.data.data);
-
                     const data = response.data.data.order;
                     const store = response.data.data.store;
                     const product = response.data.data.product;

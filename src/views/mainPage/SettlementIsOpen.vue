@@ -147,6 +147,8 @@ export default {
                 } else {
                     that.userTime = parseFloat(b / 60).toFixed(1) + "分钟";
                 }
+                this.form.totalAmount = parseFloat(this.useTime) * 0.5;
+                this.form.payMoney = this.form.totalAmount + 15;
                 // 每隔一定时间触发的逻辑操作
             }, 1000); // 10秒钟触发一次
         },
@@ -167,13 +169,12 @@ export default {
         //6,点击结算，计算消费金额
         countMoney() {
             clearInterval(this.timer); //清空定时器
-            this.form.totalAmount = parseFloat(this.useTime) * 0.5;
             this.form.orderId = this.orderMsg.orderId;
             this.form.useTime = this.useTime;
             this.form.userId = this.orderMsg.userId;
             this.form.storeId = this.orderMsg.storeId;
             this.form.stationId = this.orderMsg.stationId;
-            this.form.payMoney = this.form.totalAmount;
+
             if (this.coupon.couponId != null) {
                 if (parseFloat(this.coupon.couponMoney) < this.form.payMoney) {
                     this.form.payMoney = parseFloat(this.form.totalAmount) - parseFloat(this.coupon.couponMoney)
@@ -203,7 +204,7 @@ export default {
             this.$dialog
                 .confirm({
                     title: "提示",
-                    message: "是否要进行结算",
+                    message: "是否要进行结算，结算金额为" + this.form.payMoney + "元",
                     confirmButtonColor: "red",
                 })
                 .then(() => {
@@ -216,6 +217,8 @@ export default {
         },
         //计算的方法
         payCarMoney(form) {
+            console.log(form);
+
             form.productId = form.id
             axios.post("/my/carWashRecord/payCarMoney", form).then(resp => {
                 if (resp.data.code == 200) {

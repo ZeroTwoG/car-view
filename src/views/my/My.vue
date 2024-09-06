@@ -98,8 +98,8 @@
         <van-tabbar-item name="home" icon="coupon" @click="jump('/home')">
           主页
         </van-tabbar-item>
-        <van-tabbar-item name="search" icon="location" @click="jump('/nearByStore')">
-          附近门店
+        <van-tabbar-item name="search" icon="send-gift" @click="jump('/nearByStore')">
+          推荐门店
         </van-tabbar-item>
         <van-tabbar-item name="shop" icon="shopping-cart" @click="jump('/store')">
           商城
@@ -129,7 +129,7 @@ export default {
   },
   created() {
     this.userInfo = JSON.parse(sessionStorage.getItem("user"));
-    this.userName = sessionStorage.getItem("name");
+    this.userName = this.userInfo.userName
     this.imageURL = this.userInfo.avatar
     this.userId = this.userInfo.userId
   },

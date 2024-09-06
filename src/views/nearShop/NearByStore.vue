@@ -91,8 +91,8 @@
                 <van-tabbar-item name="home" icon="coupon" @click="jump('/home')">
                     主页
                 </van-tabbar-item>
-                <van-tabbar-item name="search" icon="location" @click="jump('/nearByStore')">
-                    附近门店
+                <van-tabbar-item name="search" icon="send-gift" @click="jump('/nearByStore')">
+                    推荐门店
                 </van-tabbar-item>
                 <van-tabbar-item name="shop" icon="shopping-cart" @click="jump('/store')">
                     商城

@@ -1,19 +1,16 @@
 <template>
   <div>
     <van-sticky>
-      <van-nav-bar
-          title="系统设置"
-          left-arrow
-          @click-left="onClickLeft"/>
+      <van-nav-bar title="系统设置" left-arrow @click-left="onClickLeft" />
     </van-sticky>
     <van-cell-group>
-      <van-cell title="意见反馈" is-link @click="opinion('/feedback')"/>
-      <van-cell title="关于我们" is-link @click="about('/AboutUs')"/>
+      <van-cell title="意见反馈" is-link @click="opinion('/feedback')" />
+      <van-cell title="关于我们" is-link @click="about('/AboutUs')" />
     </van-cell-group>
     <div style="border: 8px solid #ebedf0"></div>
     <van-cell-group>
-      <van-cell title="清除缓存" is-link @click="clearCache"/>
-      <van-cell title="检查更新" is-link @click="checkUpdate"/>
+      <van-cell title="清除缓存" is-link @click="clearCache" />
+      <van-cell title="检查更新" is-link @click="checkUpdate" />
     </van-cell-group>
     <!-- 底部 -->
     <van-tabbar>
@@ -24,8 +21,8 @@
   </div>
 </template>
 <script>
-import {Dialog} from "vant";
-import {Toast} from "vant";
+import { Dialog } from "vant";
+import { Toast } from "vant";
 
 export default {
   name: "SystemSetting",
@@ -40,27 +37,32 @@ export default {
     logout() {
       //清除token
       sessionStorage.removeItem("token");
+      sessionStorage.removeItem("user");
+      sessionStorage.removeItem("name");
+      sessionStorage.removeItem("redirect");
+      sessionStorage.removeItem("MIAO_LID");
+      sessionStorage.removeItem("place");
       //跳转到首页
-      this.$router.push("/home");
+      this.$router.push("/login");
     },
     //意见反馈跳转
     opinion(uri) {
       this.$router.push(
-          uri,
-          () => {
-          },
-          () => {
-          }
+        uri,
+        () => {
+        },
+        () => {
+        }
       );
     },
     //关于我们跳转
     about(uri) {
       this.$router.push(
-          uri,
-          () => {
-          },
-          () => {
-          }
+        uri,
+        () => {
+        },
+        () => {
+        }
       );
     },
     //清除缓存
@@ -69,12 +71,12 @@ export default {
         title: "提示",
         message: "确定要清除本地缓存？",
       })
-          .then(() => {
-            // on confirm
-          })
-          .catch(() => {
-            // on cancel
-          });
+        .then(() => {
+          // on confirm
+        })
+        .catch(() => {
+          // on cancel
+        });
     },
     //检查更新
     checkUpdate() {
@@ -83,6 +85,4 @@ export default {
   },
 }
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

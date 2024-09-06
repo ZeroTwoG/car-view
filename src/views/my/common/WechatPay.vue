@@ -122,7 +122,7 @@ export default {
             productOrder: {
                 codeUrl: "",
             },//当前订单
-            countdownTime: 30000,
+            countdownTime: 60000,
             timer: null,//定时器 每隔一段时间检查支付状态
             code_url: "",//二维码路径
             paystatus: "",//支付状态
@@ -278,6 +278,10 @@ export default {
                                     data: this.productOrderId,
                                 }
                             });
+                            if (this.timer) {
+                                clearInterval(this.timer);
+                                this.timer = null;
+                            }
                         }
                     }).catch(function (error) {
                         console.log(error);
@@ -301,6 +305,10 @@ export default {
                             data: this.productOrderId,
                         }
                     });
+                    if (this.timer) {
+                        clearInterval(this.timer);
+                        this.timer = null;
+                    }
                 }
             }).catch(function (error) {
                 console.log(error);
@@ -312,23 +320,33 @@ export default {
             if (this.timer) {
                 clearInterval(this.timer);
                 this.timer = null;
+                this.countdownTime = 60000
             }
 
             // 更新倒计时时间
             this.timer = setInterval(() => {
                 this.countdownTime -= 1000;
                 if (this.countdownTime <= 0) {
+
                     this.paymentCompleted = true;
                     this.dialogVisible = false;
                     clearInterval(this.timer);
                     this.timer = null;
                     Toast.success("超时取消");
-                    this.$router.push({
-                        path: '/unpaid?statusCode=1',
-                        query: {
-                            data: this.productOrderId,
+                    axios.delete("/my/productOrder/deleteById/" + this.productOrderId).then((response) => {
+                        if (response.data.code == 200) {
+                            Toast.success("订单已取消");
+                        } else {
+                            Toast.fail("取消失败");
                         }
-                    });
+                        this.$router.push({
+                            path: '/unpaid?statusCode=1',
+                            query: {
+                                data: this.productOrderId,
+                            }
+                        });
+                    })
+
                 }
             }, 1000);
         },

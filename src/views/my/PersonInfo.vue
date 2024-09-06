@@ -44,7 +44,7 @@
       <van-picker show-toolbar :columns="sexOptions" @cancel="showSex = false" @confirm="onSexConfirm" />
     </van-popup>
     <van-button type="info" style="width: 90%; border-radius: 20px; position: absolute; bottom: 20px; left: 5%;"
-      @click="updateInfo">保存</van-button>
+      @click="updateInfo" v-if="nameJudeg">保存</van-button>
   </div>
 </template>
 
@@ -290,6 +290,9 @@ export default {
           // 更新sessionStorage中的用户数据
           let userInfo = JSON.parse(sessionStorage.getItem("user"));
           userInfo.avatar = this.info.avatar; // 更新avatar字段
+          userInfo.userName = this.info.userName;
+          userInfo.sex = this.info.sex;
+          userInfo.birthday = this.info.birthday;
           sessionStorage.setItem("user", JSON.stringify(userInfo)); // 保存更新后的数据
           // 性别数字转文字
           switch (res.data.data.sex) {
@@ -303,6 +306,7 @@ export default {
               this.info.sex = '未知';
               break;
           }
+          this.$router.push("/my");
         } else {
           Toast(res.data.msg);
         }

@@ -71,7 +71,8 @@
                 padding: 15px 16px;
                 width: 70%;
                 font-size: 17px;
-                height: 45px">{{ product.freight }}元
+                height: 45px"><span v-if="product.isFreightShipping === '1'">{{ product.freight }}元</span>
+                    <span v-else>免邮</span>
                     <van-icon name="arrow" />
                 </van-col>
 
@@ -98,8 +99,8 @@
         </div>
         <!-- 弹框 -->
         <van-action-sheet v-model="show" title="运费说明">
-            <div class="content">免运费,部分地区不包邮</div>
-            <div class="content">{{ product.freight }}元</div>
+            <div class="content" v-if="product.isFreightShipping === '0'">免运费,部分地区不包邮</div>
+            <div class="content" v-else>{{ product.freight }}元</div>
         </van-action-sheet>
         <!-- 弹框 -->
         <van-action-sheet v-model="show1" title="温馨提示">
@@ -351,7 +352,7 @@ export default {
                         for (var i = 0; i < dataNum.length; i++) {
                             num += (dataNum[i].text.rating) * 20
                         }
-                        this.goodRatingsPercentage = num / this.total
+                        this.goodRatingsPercentage = (num / this.total).toFixed(2)
                     } else {
                         this.total = 0
                         this.productReviews = null;
@@ -364,22 +365,6 @@ export default {
         hidePhoneNumber(phone) {
             // 隐藏手机号的第二位开始的所有字符
             return phone.slice(0, 1) + "*".repeat(phone.length - 1);
-        },
-
-        //查询商品评价的数量和好评率 弃用
-        selectReviewCount() {
-            // let _this = this;
-            // this.$http
-            //     .post(
-            //         "/product/mobile/store/api/selectContentByProductId?productId=" + this.product.productId
-            //     )
-            //     .then(function (response) {
-            //         _this.reviewCount = response.data.data; //查询出来的评价的数量和好评率
-            //         _this.total = _this.reviewCount.total;
-            //         _this.goodRatingsPercentage = _this.reviewCount.goodRatingsPercentage;
-            //     })
-            //     .catch(function (error) {
-            //     });
         },
 
         goEvaluate() {
